@@ -3,17 +3,17 @@ import datetime
 from django.utils import timezone
 
 class Item(models.Model):
-    location = models.CharField(max_length=100, blank=True)
-    company = models.CharField(max_length=100, blank=True)
-    local_num = models.CharField(max_length=50, blank=True)
-    part_num = models.CharField(max_length=50, blank=True)
-    serial_num = models.CharField(max_length=50, blank=True)
-    asset_num = models.CharField(max_length=50, blank=True)
-    description = models.TextField() # name/description
-    notes = models.TextField(blank=True)
-    views = models.PositiveSmallIntegerField(default=0)
+	location = models.CharField(max_length=100, blank=True)
+	company = models.CharField(max_length=100, blank=True)
+	local_num = models.CharField(max_length=50, blank=True)
+	part_num = models.CharField(max_length=50, blank=True)
+	serial_num = models.CharField(max_length=50, blank=True)
+	asset_num = models.CharField(max_length=50, blank=True)
+	description = models.TextField() # name/description
+	notes = models.TextField(blank=True)
+	views = models.PositiveSmallIntegerField(default=0)
 
-    def __unicode__(self):
+	def __unicode__(self):
 		return self.description
 
 class Download(models.Model):
