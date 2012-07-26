@@ -6,7 +6,12 @@ class DownloadInline(admin.StackedInline):
     extra = 1
 
 class ItemAdmin(admin.ModelAdmin):
+    list_display = ('description', 'location', 'local_num')
     inlines = [DownloadInline]
 
+class RequestAdmin(admin.ModelAdmin):
+    list_display = ('status', 'item')
+    list_filter = ['sub_date']
+
 admin.site.register(Item, ItemAdmin)
-admin.site.register(Request)
+admin.site.register(Request, RequestAdmin)
