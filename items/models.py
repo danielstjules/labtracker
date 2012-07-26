@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 class Item(models.Model):
     location = models.CharField(max_length=100, blank=True)
@@ -33,6 +34,7 @@ class Download(models.Model):
 
 class Request(models.Model):
     item = models.ForeignKey(Item)
+    user = models.ForeignKey(User, blank=True, null=True)
     STATUS_CHOICES = (
         ('pending', 'Pending'),
         ('approved', 'Approved'),
@@ -40,11 +42,11 @@ class Request(models.Model):
         ('declined', 'Declined'),
     )
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
-    sub_date = models.DateTimeField('date submitted')
+    sub_date = models.DateTimeField('date submitted', auto_now_add=True)
     app_date = models.DateTimeField('date approved', blank=True, null=True)
     comp_date = models.DateTimeField('date completed', blank=True, null=True)
     decl_date = models.DateTimeField('date declined', blank=True, null=True)
-    notes = models.TextField()
+    notes = models.TextField(blank=True)
 
     def __unicode__(self):
         return "[" + self.status + "] " + str(self.item)
