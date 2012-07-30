@@ -1,0 +1,20 @@
+{% extends 'base.html' %} 
+{% block title %}log in{% endblock %}
+
+{% block content %}
+	{{ message }}
+	<form action="/labtracker/login/" method="post">
+		{% csrf_token %}
+		{% if next %}
+		<input type="hidden" name="next" value="{{ next }}" />
+		{% endif %}
+
+		Username:
+		<input type="text" name="username" value="{{ username}}" /><br />
+
+		Password:
+		<input type="password" name="password" value="" /><br />
+
+		<input type="submit" value="Log In" />
+	</form>
+{% endblock %}

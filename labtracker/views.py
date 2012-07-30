@@ -22,3 +22,26 @@ def request(request, item_id):
     item = Item.objects.get(pk = item_id)
     request = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
     return HttpResponse("You've submitted a request for item %s." % item_id)
+
+def login_user(request):
+    """Log in using custom login page"""
+    message = "Please log in using the form below."
+    username = ''
+    password = ''
+
+    if request.POST:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username = username, password = password)
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                message = "You've successfully logged in!"
+            else:
+                message = "Your account is not active, please contact Support."
+        else:
+            message = "Your username and/or password were incorrect."
+
+    return render_to_response('auth.html',{'message':message, 'username': username},
+                               context_instance=RequestContext(request))
