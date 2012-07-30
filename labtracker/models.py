@@ -42,10 +42,8 @@ class Request(models.Model):
         ('declined', 'Declined'),
     )
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
-    sub_date = models.DateTimeField('date submitted', auto_now_add=True)
-    app_date = models.DateTimeField('date approved', blank=True, null=True)
-    comp_date = models.DateTimeField('date completed', blank=True, null=True)
-    decl_date = models.DateTimeField('date declined', blank=True, null=True)
+    submitted = models.DateTimeField('date submitted', auto_now_add=True)
+    updated = models.DateTimeField('date updated', auto_now=True)
     notes = models.TextField(blank=True)
 
     def __unicode__(self):

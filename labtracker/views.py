@@ -7,11 +7,11 @@ from django.contrib.auth import authenticate, login
 
 def index(request):
     latest_item_list = Item.objects.all()[:5]
-    return render_to_response('labtracker/index.html', {'latest_item_list': latest_item_list})
+    return render_to_response('labtracker/item_list.html', {'latest_item_list': latest_item_list})
 
 def detail(request, item_id):
     i = get_object_or_404(Item, pk=item_id)
-    return render_to_response('labtracker/detail.html', {'item': i},
+    return render_to_response('labtracker/item_detail.html', {'item': i},
                                context_instance=RequestContext(request))
 
 def request(request, item_id):
