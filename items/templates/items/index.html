@@ -1,4 +1,8 @@
-{% if latest_item_list %}
+{% extends 'base.html' %} 
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    {% if latest_item_list %}
     <ul>
     {% for item in latest_item_list %}
         <li><a href="/items/{{ item.id }}/">{{ item.description }}</a></li>
@@ -7,3 +11,4 @@
 {% else %}
     <p>No items are available.</p>
 {% endif %}
+{% endblock %}

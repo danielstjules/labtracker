@@ -1,4 +1,8 @@
-<h2>{{ item.description }}</h2>
+{% extends 'base.html' %} 
+{% block title %}{{ item.description }}{% endblock %}
+
+{% block content %}
+ <h2>{{ item.description }}</h2>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -25,3 +29,4 @@
     <li>{{ request }}</li>
 {% endfor %}
 </ul>
+{% endblock %}
