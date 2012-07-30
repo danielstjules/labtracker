@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from items.models import Request, Item, Download
+from django.contrib.auth import authenticate, login
 
 def index(request):
     latest_item_list = Item.objects.all()[:5]
@@ -15,3 +16,4 @@ def detail(request, item_id):
 
 def request(request, item_id):
     return HttpResponse("You're submitting a request for item %s." % item_id)
+
