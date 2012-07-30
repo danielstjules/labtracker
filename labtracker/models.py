@@ -62,7 +62,7 @@ class Request(models.Model):
         return self.status == 'declined'
 
     def was_submitted_recently(self):
-        return self.sub_date >= timezone.now() - datetime.timedelta(days=1)
-    was_submitted_recently.admin_order_field = 'sub_date'
+        return self.submitted >= timezone.now() - datetime.timedelta(days=1)
+    was_submitted_recently.admin_order_field = 'submitted'
     was_submitted_recently.boolean = True
     was_submitted_recently.short_description = 'Submitted Recently?'

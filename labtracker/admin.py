@@ -10,8 +10,8 @@ class ItemAdmin(admin.ModelAdmin):
     inlines = [DownloadInline]
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('item', 'status', 'sub_date')
-    list_filter = ['sub_date']
+    list_display = ('item', 'status', 'submitted')
+    list_filter = ['submitted']
 
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Request, RequestAdmin)
