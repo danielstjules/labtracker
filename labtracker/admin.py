@@ -6,7 +6,7 @@ class DownloadInline(admin.StackedInline):
     extra = 1
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('description', 'location', 'local_num')
+    list_display = ('name', 'location', 'local_num')
     inlines = [DownloadInline]
 
 class RequestAdmin(admin.ModelAdmin):

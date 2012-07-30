@@ -4,18 +4,18 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Item(models.Model):
+    name = models.CharField(max_length=50)
     location = models.CharField(max_length=100, blank=True)
-    company = models.CharField(max_length=100, blank=True)
     local_num = models.CharField(max_length=50, blank=True)
+    company = models.CharField(max_length=100, blank=True)
     part_num = models.CharField(max_length=50, blank=True)
     serial_num = models.CharField(max_length=50, blank=True)
     asset_num = models.CharField(max_length=50, blank=True)
-    description = models.CharField(max_length=50) # name/description
     notes = models.TextField(blank=True)
     views = models.PositiveSmallIntegerField(default=0)
 
     def __unicode__(self):
-        return self.description
+        return self.name
 
 class Download(models.Model):
     item = models.ForeignKey(Item)
