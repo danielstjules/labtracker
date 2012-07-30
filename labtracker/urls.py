@@ -1,9 +1,7 @@
 from django.conf.urls import patterns, include, url
 
-from django.contrib import admin
-admin.autodiscover()
-
-urlpatterns = patterns('',
-    url(r'^items/', include('items.urls')),
-    url(r'^admin/', include(admin.site.urls)),
+urlpatterns = patterns('labtracker.views',
+    url(r'^$', 'index'),
+    url(r'^(?P<item_id>\d+)/$', 'detail'),
+    url(r'^(?P<item_id>\d+)/request/$', 'request'),
 )
