@@ -8,7 +8,8 @@ from django.contrib.auth import authenticate, login, logout
 def index(request):
     """View a list of all items"""
     latest_item_list = Item.objects.all()[:5]
-    return render_to_response('labtracker/item_list.html', {'latest_item_list': latest_item_list})
+    return render_to_response('labtracker/item_list.html', {'latest_item_list': latest_item_list},
+                               context_instance=RequestContext(request))
 
 def detail(request, item_id):
     """View details of an item"""
