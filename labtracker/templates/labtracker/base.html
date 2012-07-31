@@ -15,9 +15,22 @@
 <div id="header">
 	<div id="logo"></div>
 	<div id="topnav">
-		<a href="/admin/">Administration</a>
-		<a href="/labtracker/login/">Log in</a>
+		
+		{% if not user.is_authenticated %}
+			<a href="/labtracker/login/">Log in</a>
+		{% endif %}
+
+		{% if user.is_authenticated %}
+			<a href="/labtracker/logout/">Logout</a>
+		{% endif %}
+
+		{% if user.is_superuser and user.is_authenticated %}
+			<a href="/admin/">Administration</a>
+		{% endif %}	
+
 		<a href="/labtracker/">Home</a>
+
+		
 	</div>
 </div>
 

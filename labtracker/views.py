@@ -45,3 +45,8 @@ def login_user(request):
 
     return render_to_response('auth.html',{'message':message, 'username': username},
                                context_instance=RequestContext(request))
+
+def logout_user(request):
+    
+    logout(request)
+    return HttpResponseRedirect("/labtracker/")    
