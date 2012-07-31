@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from labtracker.models import Request, Item, Download
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     """View a list of all items"""
