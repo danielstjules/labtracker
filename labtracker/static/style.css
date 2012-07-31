@@ -1,0 +1,84 @@
+* {
+	border: none; 
+	margin: 0; 
+	padding: 0;
+}
+
+.fl {
+	float: left;
+}
+
+body {
+	background: #474747 url('bg.jpg') top left repeat; 
+	color: #5f5e5e; 
+	font-size: 10pt;
+	font-family: Verdana, Arial, sans-serif;
+	line-height: 150%;
+}
+
+a, a:link, a:visited, a:active, a:hover {
+	color: #1d88e5;
+	text-decoration:none;
+	font-weight: bold;
+}
+
+.clear { 
+	clear: both; 
+}
+
+p { padding-bottom: 10px; }
+
+#wrap {
+	background: url('bg_top.jpg') top left repeat-x; 
+}
+
+#header {
+	width: 770px;
+	margin: 0 auto;
+	height: 67px;
+}
+
+#logo {
+	width: 186px;
+	height: 67px;
+	display: block;
+	float: left;
+	background: url('logo.jpg') top left no-repeat;
+}
+
+#topnav {
+	width: 300px;
+	height: 41px;
+	padding-top: 26px;
+	display: block;
+	float: right;
+}
+
+#topnav a, #topnav a:link, #topnav a:visited, 
+#topnav a:active, #topnav a:hover {
+	margin-right: 20px;
+	font-weight: normal;
+	color: #d5d5d5;
+	float: right;
+}
+
+#container {
+	width: 770px;
+	margin: 0 auto;
+	background: #f7f7f7 url('container.jpg') bottom no-repeat;
+}
+
+#message {
+	padding: 16px 20px 20px 20px;
+	background: url('message.jpg') top left no-repeat;
+	height: 17px;
+	width: 730px;
+}
+
+#content {
+	padding: 20px;
+}
+
+ul {
+	padding: 20px;
+}
