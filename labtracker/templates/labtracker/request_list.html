@@ -1,0 +1,30 @@
+{% extends 'base.html' %} 
+{% block title %}labtracker | home{% endblock %}
+
+{% block content %}
+    {% if request_list %}
+	<table id="equipment_list" summary="Equipment List">
+	<thead>
+		<tr>
+			<th scope="col">Item</th>
+			<th scope="col">Status</th>
+			<th scope="col">Date Submitted</th>
+			<th scope="col">Date Updated</th>
+			
+		</tr>
+	</thead>
+	<tbody>
+    	{% for req in request_list %}
+		<tr>
+			<td><a href="/labtracker/{{ req.item.id }}/">{{ req.item.name }}</a></td>
+			<td>{{ req.submitted }}</td>
+			<td>{{ req.updated. }}</td>
+			<td>{{ req.status}}</td>
+		</tr>
+    	{% endfor %}
+	</tbody>
+	</table>
+{% else %}
+    <p>You have not placed any requests.</p>
+{% endif %}
+{% endblock %}

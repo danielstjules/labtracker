@@ -5,5 +5,6 @@ urlpatterns = patterns('labtracker.views',
     url(r'^(?P<item_id>\d+)/$', 'detail'),
     url(r'^(?P<item_id>\d+)/request/$', 'request'),
     url(r'^login/$', 'login_user'),
+    url(r'^request_list/$', 'requests_viewer'),
     url(r'^logout/$', 'logout_user'),
 )

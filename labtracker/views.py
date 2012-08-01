@@ -7,9 +7,17 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     """View a list of all items"""
-    item_list = Item.objects.all()
+    logged_user = ""
+    item_list = Item.objects.all()   
     return render_to_response('labtracker/item_list.html', {'item_list': item_list},
                                context_instance=RequestContext(request))
+
+def requests_viewer(request):
+    """View a list of all requests"""
+    request_list = Request.objects.filter(user = request.user.id)
+    return render_to_response('labtracker/request_list.html', {'request_list': request_list},
+                               context_instance=RequestContext(request))
+
 
 def detail(request, item_id):
     """View details of an item"""
