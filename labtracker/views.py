@@ -7,8 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 
 def index(request):
     """View a list of all items"""
-    latest_item_list = Item.objects.all()[:5]
-    return render_to_response('labtracker/item_list.html', {'latest_item_list': latest_item_list},
+    item_list = Item.objects.all()
+    return render_to_response('labtracker/item_list.html', {'item_list': item_list},
                                context_instance=RequestContext(request))
 
 def detail(request, item_id):
@@ -50,6 +50,6 @@ def login_user(request):
                                context_instance=RequestContext(request))
 
 def logout_user(request):
-    
+    """Log the user out and redirect them to the app root"""
     logout(request)
     return HttpResponseRedirect("/labtracker/")    

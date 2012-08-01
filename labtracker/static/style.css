@@ -14,6 +14,7 @@ body {
 	font-size: 10pt;
 	font-family: Verdana, Arial, sans-serif;
 	line-height: 150%;
+	padding-bottom: 20px;
 }
 
 a, a:link, a:visited, a:active, a:hover {
@@ -81,4 +82,31 @@ p { padding-bottom: 10px; }
 
 ul {
 	padding: 20px;
+}
+
+table { 
+	font-size: 12px;
+	text-align: left;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+th { 
+	font-size: 13px;
+	font-weight: normal;
+	background: #70b6f2;
+	border-top: 4px solid #5ea0d9;
+	color: #384a58;
+	padding: 8px;
+}
+
+td { 
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid transparent;
+	padding: 8px;
+}
+
+tr:hover td { 
+	background: #e7eff7;
+	color: #313131;
 }
