@@ -113,3 +113,11 @@ tr:hover td {
 	background: #e7eff7;
 	color: #313131;
 }
+
+#top_pag {
+	margin-bottom: 20px;
+}
+
+#bottom_pag {
+	margin-top: 20px;
+}

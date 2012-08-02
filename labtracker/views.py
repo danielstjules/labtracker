@@ -4,11 +4,20 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from labtracker.models import Request, Item, Download
 from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def index(request):
-    """View a list of all items"""
-    logged_user = ""
-    item_list = Item.objects.all()   
+def index(request, page = 1):
+    """View a paginated list of items"""
+    items = Item.objects.all() 
+    paginator = Paginator(items, 50)
+
+    try:
+        item_list = paginator.page(page)
+    except PageNotAnInteger:
+        item_list = paginator.page(1)
+    except EmptyPage:
+        item_list = paginator.page(paginator.num_pages)
+
     return render_to_response('labtracker/item_list.html', {'item_list': item_list},
                                context_instance=RequestContext(request))
 
