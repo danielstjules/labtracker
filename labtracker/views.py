@@ -48,16 +48,18 @@ def login_user(request):
             if user.is_active:
                 login(request, user)
                 message = "You've successfully logged in!"
-                template = 'auth_success.html'
+                template = 'auth_forward.html'
             else:
                 message = "Your account is not active, please contact Support."
         else:
             message = "Your username and/or password were incorrect."
 
-    return render_to_response(template,{'message':message, 'username': username},
-                               context_instance=RequestContext(request))
+    return render_to_response(template,{'message' : message, 'title' : 'log in'},
+                               context_instance = RequestContext(request))
 
 def logout_user(request):
     """Log the user out and redirect them to the app root"""
     logout(request)
-    return HttpResponseRedirect("/labtracker/")    
+    message = "You've been logged out!"
+    return render_to_response('auth_forward.html', {'message' : message, 'title' : 'log out'},
+                               context_instance = RequestContext(request))  
