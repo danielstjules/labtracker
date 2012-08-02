@@ -34,7 +34,7 @@ p { padding-bottom: 10px; }
 }
 
 #header {
-	width: 770px;
+	width: 920px;
 	margin: 0 auto;
 	height: 67px;
 }
@@ -48,7 +48,7 @@ p { padding-bottom: 10px; }
 }
 
 #topnav {
-	width: 400px;
+	width: 700px;
 	height: 41px;
 	padding-top: 26px;
 	display: block;
@@ -63,8 +63,12 @@ p { padding-bottom: 10px; }
 	float: right;
 }
 
+#topnav a:hover {
+	color: #E8E8E8;
+}
+
 #container {
-	width: 770px;
+	width: 920px;
 	margin: 0 auto;
 	background: #f7f7f7 url('container.jpg') bottom no-repeat;
 }
@@ -73,7 +77,6 @@ p { padding-bottom: 10px; }
 	padding: 16px 20px 20px 20px;
 	background: url('message.jpg') top left no-repeat;
 	height: 17px;
-	width: 730px;
 }
 
 #content {
