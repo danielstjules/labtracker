@@ -38,8 +38,11 @@ def request(request, item_id):
     """Submit a request for an item"""
     p = request.POST
     item = Item.objects.get(pk = item_id)
-    request = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
-    return HttpResponse("You've submitted a request for item %s." % item_id)
+    message = "You have successfully submitted a request for item: " + item.name
+    template = 'forward.html'
+    req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
+    return render_to_response(template, {'message' : message, 'title' : 'Sucessful'},
+                               context_instance = RequestContext(request))
 
 def login_user(request):
     """Log in using custom login page"""
@@ -58,6 +61,7 @@ def login_user(request):
                 login(request, user)
                 message = "You've successfully logged in!"
                 template = 'auth_forward.html'
+                
             else:
                 message = "Your account is not active, please contact Support."
         else:
@@ -70,5 +74,6 @@ def logout_user(request):
     """Log the user out and redirect them to the app root"""
     logout(request)
     message = "You've been logged out!"
-    return render_to_response('auth_forward.html', {'message' : message, 'title' : 'log out'},
+    template = 'auth_forward.html'
+    return render_to_response(template, {'message' : message, 'title' : 'log out'},
                                context_instance = RequestContext(request))  
