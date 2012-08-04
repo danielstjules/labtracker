@@ -40,8 +40,9 @@ def request(request, item_id):
     item = Item.objects.get(pk = item_id)
     message = "You have successfully submitted a request for item: " + item.name
     template = 'forward.html'
+    fwd_page = '/labtracker/request_list/'
     req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
-    return render_to_response(template, {'message' : message, 'title' : 'Sucessful'},
+    return render_to_response(template, {'message' : message, 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
 
 def login_user(request):
@@ -50,7 +51,8 @@ def login_user(request):
     username = ''
     password = ''
     template = 'auth.html'
-
+    fwd_page = '/labtracker/'
+    
     if request.POST:
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -59,21 +61,22 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                message = "You've successfully logged in!"
-                template = 'auth_forward.html'
+                message = "Login successful!"
+                template = 'forward.html'
                 
             else:
                 message = "Your account is not active, please contact Support."
         else:
             message = "Your username and/or password were incorrect."
 
-    return render_to_response(template,{'message' : message, 'title' : 'log in'},
+    return render_to_response(template,{'message' : message, 'title' : 'log in', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
 
 def logout_user(request):
     """Log the user out and redirect them to the app root"""
     logout(request)
-    message = "You've been logged out!"
-    template = 'auth_forward.html'
-    return render_to_response(template, {'message' : message, 'title' : 'log out'},
+    message = "You've been successfully logged out!"
+    template = 'forward.html'
+    fwd_page = '/labtracker/'
+    return render_to_response(template, {'message' : message, 'title' : 'log out', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))  
