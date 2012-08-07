@@ -98,10 +98,6 @@ p { padding-bottom: 10px; }
 	padding: 20px;
 }
 
-ul {
-	padding: 20px;
-}
-
 /* Data display via tables */
 
 table { 
@@ -139,6 +135,12 @@ tr:hover td {
 	margin-top: 20px;
 }
 
+/* list-based info */
+
+ul {
+	padding: 0 20px 10px 20px;
+}
+
 /* messages */
 
 #error_message {
@@ -157,7 +159,7 @@ tr:hover td {
 
 /* forms */
 
-input {
+input, textarea {
 	margin: 10px 0;
 	padding: 2px;
 	border: 1px solid #d5d5d5;
