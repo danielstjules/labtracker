@@ -38,22 +38,37 @@ class Request(models.Model):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
         ('approved', 'Approved'),
+        ('active', 'Active'),
         ('completed', 'Completed'),
         ('declined', 'Declined'),
     )
     status = models.CharField(max_length=15, choices=STATUS_CHOICES)
-    submitted = models.DateTimeField('date submitted', auto_now_add=True)
-    updated = models.DateTimeField('date updated', auto_now=True)
+    read = models.BooleanField(default=True)
     notes = models.TextField(blank=True)
+
+    date_submitted = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField('last modified date', auto_now=True)
+    date_approved = models.DateTimeField(blank=True, null=True)
+    date_active = models.DateTimeField('started use', blank=True, null=True)
+    date_completed = models.DateTimeField('finished use', blank=True, null=True)
+    date_declined = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return "[" + self.status + "] " + str(self.item)
+
+    def save(self, *args, **kwargs):
+        if self.date_submitted != self.date_updated:
+            self.read = False
+        super(Request, self).save(*args, **kwargs)
 
     def is_pending(self):
         return self.status == 'pending'
 
     def is_approved(self):
         return self.status == 'approved'
+
+    def is_active(self):
+        return self.status == 'active'
 
     def is_completed(self):
         return self.status == 'completed'
@@ -62,7 +77,7 @@ class Request(models.Model):
         return self.status == 'declined'
 
     def was_submitted_recently(self):
-        return self.submitted >= timezone.now() - datetime.timedelta(days=1)
+        return self.date_submitted >= timezone.now() - datetime.timedelta(days=1)
     was_submitted_recently.admin_order_field = 'submitted'
     was_submitted_recently.boolean = True
     was_submitted_recently.short_description = 'Submitted Recently?'

@@ -33,7 +33,7 @@ def submit_request(request, item_id):
     item = Item.objects.get(pk = item_id)
     message = {'type': 'success_message', 'text': "You have successfully submitted a request for item: " + item.name}
     template = 'forward.html'
-    fwd_page = '/labtracker/request_list/'
+    fwd_page = '/labtracker/item/' + item_id
     req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
     return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))

@@ -19,8 +19,8 @@
 			<tr>
 				<td><a href="/labtracker/item/{{ req.item.id }}/">{{ req.item.name }}</a></td>
 				<td><a href="/labtracker/request/{{ req.id }}/">{{ req.status }}</a></td>
-				<td>{{ req.submitted }}</td>
-				<td>{{ req.updated}}</td>
+				<td>{{ req.date_submitted }}</td>
+				<td>{{ req.date_updated}}</td>
 			</tr>
 		{% endfor %}
 		</tbody>
