@@ -19,6 +19,19 @@ body {
 	padding-bottom: 20px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+	clear: both;
+	padding-bottom: 10px;
+}
+
+h1 {
+	font-size: 14pt;
+}
+
+h2 {
+	font-size: 12pt;
+}
+
 a, a:link, a:visited, a:active, a:hover {
 	color: #1d88e5;
 	text-decoration:none;
