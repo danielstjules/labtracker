@@ -2,12 +2,12 @@
 {% block title %}labtracker | {{ item.name }}{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
- <h2>{{ item.name }}</h2>
 
+<h2>{{ item.name }}</h2>
+
+{% if user.is_authenticated %}
 <strong>Request</strong>
 <form action="/labtracker/item/{{ item.id }}/request/" method="post">
-
 {% csrf_token %}
 	<label for="notes">Notes</label><br />
 	<textarea name="notes" id="notes"></textarea>
@@ -15,6 +15,9 @@
 	<br />
 	<input type="submit" value="Request" />
 </form>
+{% else %}
+You need to be logged in to submit requests.
+{% endif %}
 
 <strong>Downloads</strong>
 <ul>
@@ -29,9 +32,5 @@
     <li>{{ request }}</li>
 {% endfor %}
 </ul>
-{% else %}
-<div>You need to be logged in to submit requests. </div>
-<div><a href = "/labtracker/">Return Home</a></div>
-{% endif %}
 
 {% endblock %}
