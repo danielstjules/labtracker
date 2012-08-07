@@ -1,21 +1,19 @@
 {% extends 'base.html' %} 
-{% block title %}labtracker | home{% endblock %}
+{% block title %}labtracker | Home{% endblock %}
 
 {% block content %}
-	{% if item_list %}
+{% if item_list %}
 	<div class="pagination" id="top_pag">
 		<span class="step-links">
-			{% if item_list.has_previous %}
-				<a href="/labtracker/{{ item_list.previous_page_number }}/">previous</a>
-			{% endif %}
-
+		{% if item_list.has_previous %}
+			<a href="/labtracker/{{ item_list.previous_page_number }}/">previous</a>
+		{% endif %}
 			<span class="current">
 				Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
 			</span>
-
-			{% if item_list.has_next %}
-				<a href="/labtracker/{{ item_list.next_page_number }}/">next</a>
-			{% endif %}
+		{% if item_list.has_next %}
+			<a href="/labtracker/{{ item_list.next_page_number }}/">next</a>
+		{% endif %}
 		</span>
 	</div>
 
@@ -30,7 +28,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{% for item in item_list %}
+	{% for item in item_list %}
 		<tr>
 			<td>{{ item.local_num }}</td>
 			<td><a href="/labtracker/item/{{ item.id }}/">{{ item.name }}</a></td>
@@ -38,25 +36,23 @@
 			<td>{{ item.company }}</td>
 			<td>{{ item.part_num }}</td>
 		</tr>
-		{% endfor %}
+	{% endfor %}
 	</tbody>
 	</table>
 
-<div class="pagination" id="bottom_pag">
-	<span class="step-links">
+	<div class="pagination" id="bottom_pag">
+		<span class="step-links">
 		{% if item_list.has_previous %}
 			<a href="/labtracker/{{ item_list.previous_page_number }}/">previous</a>
 		{% endif %}
-
-		<span class="current">
-			Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
-		</span>
-
+			<span class="current">
+				Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
+			</span>
 		{% if item_list.has_next %}
 			<a href="/labtracker/{{ item_list.next_page_number }}/">next</a>
 		{% endif %}
-	</span>
-</div>
+		</span>
+	</div>
 
 {% else %}
 	<p>No items are available.</p>

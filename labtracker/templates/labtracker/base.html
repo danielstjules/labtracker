@@ -37,6 +37,7 @@
 		labtracker is an online tool for keeping track of lab equipment and use
 	</div>
 	<div id="content">
+		{% block h1_title %}{% endblock %}
 		{% if error_message %}<div id="error_message">{{ error_message }}</div>{% endif %}
 		{% if success_message %}<div id="success_message">{{ success_message }}</div>{% endif %}
 		{% if message %}<div id="message">{{ message }}</div>{% endif %}
