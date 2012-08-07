@@ -38,18 +38,17 @@ def request(request, item_id):
     """Submit a request for an item"""
     p = request.POST
     item = Item.objects.get(pk = item_id)
-    message = "You have successfully submitted a request for item: " + item.name
+    message = {'type': 'success_message', 'text': "You have successfully submitted a request for item: " + item.name}
     template = 'forward.html'
     fwd_page = '/labtracker/request_list/'
     req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
-    return render_to_response(template, {'message' : message, 'title' : 'Sucessful', 'fwd_page' : fwd_page},
+    return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
 
 def login_user(request):
     """Log in using custom login page"""
-    message = "Please log in using the form below."
-    username = ''
-    password = ''
+    message = {'type': 'message', 'text': "Please log in using the form below."}
+    username = password = ''
     template = 'auth.html'
     fwd_page = '/labtracker/'
     
@@ -61,22 +60,21 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                message = "Login successful!"
+                message = {'type': 'success_message', 'text': "Login successful!"}
                 template = 'forward.html'
-                
             else:
-                message = "Your account is not active, please contact Support."
+                message = {'type': 'error_message', 'text': "Your account is not active, please contact Support."}
         else:
-            message = "Your username and/or password were incorrect."
+            message = {'type': 'error_message', 'text': "Your username and/or password were incorrect."}
 
-    return render_to_response(template,{'message' : message, 'title' : 'log in', 'fwd_page' : fwd_page},
-                               context_instance = RequestContext(request))
+    return render_to_response(template,{message['type'] : message['text'], 'title' : 'log in', 'fwd_page' : fwd_page}, 
+                                context_instance = RequestContext(request))
 
 def logout_user(request):
     """Log the user out and redirect them to the app root"""
     logout(request)
-    message = "You've been successfully logged out!"
+    message = {'type': 'success_message', 'text': "You've been successfully logged out!"}
     template = 'forward.html'
     fwd_page = '/labtracker/'
-    return render_to_response(template, {'message' : message, 'title' : 'log out', 'fwd_page' : fwd_page},
+    return render_to_response(template, {message['type'] : message['text'], 'title' : 'log out', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))  

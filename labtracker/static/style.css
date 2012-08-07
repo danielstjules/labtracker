@@ -126,6 +126,22 @@ tr:hover td {
 	margin-top: 20px;
 }
 
+/* messages */
+
+#error_message {
+	background: #F07382;
+	border: 1px solid #B83040;
+	padding: 10px;
+	color: #fff;
+}
+
+#success_message {
+	background: #73F08C;
+	border: 1px solid #30B849;
+	padding: 10px;
+	color: #383838;
+}
+
 /* forms */
 
 input {
