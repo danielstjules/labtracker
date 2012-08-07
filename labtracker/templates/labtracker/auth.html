@@ -3,18 +3,18 @@
 
 {% block content %}
 	{{ message }}
-	<form action="/labtracker/login/" method="post">
+	<form action="/labtracker/login/" method="post" id="login_form">
 		{% csrf_token %}
 		{% if next %}
 		<input type="hidden" name="next" value="{{ next }}" />
 		{% endif %}
 
-		Username:
-		<input type="text" name="username" value="{{ username}}" /><br />
+		<label for="username">Username</label>
+		<input type="text" name="username" value="{{ username}}" tabindex="1" /><br />
 
-		Password:
-		<input type="password" name="password" value="" /><br />
+		<label for="password">Password</label>
+		<input type="password" name="password" value="" tabindex="2" /><br />
 
-		<input type="submit" value="Log In" />
+		<input type="submit" value="Log In" class="submit" tabindex="3" />
 	</form>
 {% endblock %}
