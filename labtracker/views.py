@@ -6,7 +6,7 @@ from labtracker.models import Request, Item, Download
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def index(request, page = 1):
+def item_list(request, page = 1):
     """View a paginated list of items"""
     items = Item.objects.all() 
     paginator = Paginator(items, 50)
@@ -21,20 +21,13 @@ def index(request, page = 1):
     return render_to_response('labtracker/item_list.html', {'item_list': item_list},
                                context_instance=RequestContext(request))
 
-def requests_viewer(request):
-    """View a list of all requests"""
-    request_list = Request.objects.filter(user = request.user.id)
-    return render_to_response('labtracker/request_list.html', {'request_list': request_list},
-                               context_instance=RequestContext(request))
-
-
-def detail(request, item_id):
+def item_detail(request, item_id):
     """View details of an item"""
     i = get_object_or_404(Item, pk = item_id)
     return render_to_response('labtracker/item_detail.html', {'item': i},
                                context_instance=RequestContext(request))
 
-def request(request, item_id):
+def submit_request(request, item_id):
     """Submit a request for an item"""
     p = request.POST
     item = Item.objects.get(pk = item_id)
@@ -44,6 +37,18 @@ def request(request, item_id):
     req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
     return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
+
+def request_list(request):
+    """View a list of requests"""
+    request_list = Request.objects.filter(user = request.user.id)
+    return render_to_response('labtracker/request_list.html', {'request_list': request_list},
+                               context_instance=RequestContext(request))
+
+def request_detail(request, request_id):
+    """View details of a request"""
+    i = get_object_or_404(Request, pk = request_id)
+    return render_to_response('labtracker/request_detail.html', {'request': i},
+                               context_instance=RequestContext(request))
 
 def login_user(request):
     """Log in using custom login page"""

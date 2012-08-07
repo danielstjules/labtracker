@@ -28,7 +28,7 @@
 	<h2>All Requests</h2>
 	<ul>
 	{% for request in item.request_set.all %}
-		<li>{{ request }}</li>
+		<li><a href="/labtracker/request/{{ request.id }}/">{{ request }}</a></li>
 	{% endfor %}
 	</ul>
 
