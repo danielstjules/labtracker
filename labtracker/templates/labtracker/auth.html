@@ -2,7 +2,6 @@
 {% block title %}labtracker | log in{% endblock %}
 
 {% block content %}
-	{{ message }}
 	<form action="/labtracker/login/" method="post" id="login_form">
 		{% csrf_token %}
 		{% if next %}

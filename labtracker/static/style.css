@@ -75,7 +75,7 @@ p { padding-bottom: 10px; }
 	background: #f7f7f7 url('container.jpg') bottom no-repeat;
 }
 
-#message {
+#notifications {
 	padding: 16px 20px 20px 20px;
 	background: url('message.jpg') top left no-repeat;
 	height: 17px;
