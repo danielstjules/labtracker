@@ -68,24 +68,6 @@ class Request(models.Model):
         self.read = True
         super(Request, self).save()
 
-    def is_pending(self):
-        return self.status == 'pending'
-
-    def is_approved(self):
-        return self.status == 'approved'
-
-    def is_active(self):
-        return self.status == 'active'
-
-    def is_completed(self):
-        return self.status == 'completed'
-
-    def is_declined(self):
-        return self.status == 'declined'
-
-    def is_closed(self):
-        return self.status == 'declined' or self.status == 'completed'
-
     def was_submitted_recently(self):
         return self.date_submitted >= timezone.now() - datetime.timedelta(days=1)
     was_submitted_recently.admin_order_field = 'submitted'
