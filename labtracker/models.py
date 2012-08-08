@@ -62,7 +62,7 @@ class Request(models.Model):
             if not(orig.read == False and self.read == True):
                 if self.date_submitted != self.date_updated:
                     self.read = False
-        super(MyModel, self).save(*args, **kwargs)
+        super(Request, self).save(*args, **kwargs)
 
     def mark_read(self):
         self.read = True

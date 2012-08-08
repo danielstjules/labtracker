@@ -47,7 +47,7 @@ def request_list(request):
 def request_detail(request, request_id):
     """View details of a request"""
     i = get_object_or_404(Request, pk = request_id)
-    if request.user == i.user.id:
+    if request.user == i.user:
         i.mark_read()
     return render_to_response('labtracker/request_detail.html', {'request': i},
                                context_instance=RequestContext(request))
