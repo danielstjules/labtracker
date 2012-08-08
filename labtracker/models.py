@@ -57,9 +57,16 @@ class Request(models.Model):
         return "[" + self.status + "] " + str(self.item)
 
     def save(self, *args, **kwargs):
-        if self.date_submitted != self.date_updated:
-            self.read = False
-        super(Request, self).save(*args, **kwargs)
+        if self.pk is not None:
+            orig = Request.objects.get(pk=self.pk)
+            if not(orig.read == False and self.read == True):
+                if self.date_submitted != self.date_updated:
+                    self.read = False
+        super(MyModel, self).save(*args, **kwargs)
+
+    def mark_read(self):
+        self.read = True
+        super(Request, self).save()
 
     def is_pending(self):
         return self.status == 'pending'
@@ -75,6 +82,9 @@ class Request(models.Model):
 
     def is_declined(self):
         return self.status == 'declined'
+
+    def is_closed(self):
+        return self.status == 'declined' or self.status == 'completed'
 
     def was_submitted_recently(self):
         return self.date_submitted >= timezone.now() - datetime.timedelta(days=1)

@@ -34,7 +34,19 @@
 
 <div id="container">
 	<div id="notifications">
+	{% if user.is_authenticated %}
+		{% if unread_number == 1 %}
+			You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> request.
+		{% endif %}
+		{% if unread_number > 1 %}
+			You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> requests.
+		{% endif %}
+		{% if unread_number == 0 %}
+			You have no updated requests.
+		{% endif %}
+	{% else %}
 		labtracker is an online tool for keeping track of lab equipment and use
+	{% endif %}	
 	</div>
 	<div id="content">
 		{% block h1_title %}{% endblock %}

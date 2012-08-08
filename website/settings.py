@@ -1,4 +1,5 @@
 # Django settings for labtracker project.
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -155,3 +156,7 @@ LOGGING = {
         },
     }
 }
+
+TEMPLATE_CONTEXT_PROCESSORS += (
+"labtracker.context_processors.unread_processor",
+)
