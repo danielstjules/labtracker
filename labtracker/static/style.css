@@ -38,6 +38,10 @@ a, a:link, a:visited, a:active, a:hover {
 	font-weight: bold;
 }
 
+.username{
+	color: #1d88e5;;
+}
+
 .clear { 
 	clear: both; 
 }

@@ -7,11 +7,7 @@ def unread_processor(request):
 		user = request.user.id, 
 		read = False, 
 	).count()
-    return {'unread_number': unread_number}
-
-def username_processor(request):
-    user_name = request.user.username
-    return {'user_name': user_name}    
+    return {'unread_number': unread_number} 
 
 def pending_requests_nr_processor(request):
     pending_requests_nr = Request.objects.filter(status = 'pending').count()
