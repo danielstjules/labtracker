@@ -4,6 +4,16 @@
 
 {% block content %}
 
+	<h2>Details</h2>
+	<p><strong>Location:</strong> {{ item.location }}<br />
+	<strong>Local Number:</strong> {{ item.local_num }}<br />
+	<strong>Company:</strong> {{ item.company }}<br />
+	<strong>Part Number:</strong> {{ item.part_num }}<br />
+	<strong>Serial Number:</strong> {{ item.serial_num }}<br />
+	<strong>Asset Number:</strong> {{ item.asset_num }}<br />
+	<strong>Notes:</strong> {{ item.notes }}<br />
+	<strong>Views:</strong> {{ item.views }}<br /></p>
+
 {% if user.is_authenticated %}
 	<h2>Request</h2>
 	<form action="/labtracker/item/{{ item.id }}/request/" method="post">
@@ -19,11 +29,12 @@
 {% endif %}
 
 	<h2>Downloads</h2>
-	<ul>
 	{% for download in item.download_set.all %}
-		<li>{{ download.name }}</li>
+		<div class="download">
+			<p><strong>[{{ download.dtype }}] <a href="{{ download.url }}">{{ download.name }}</a></strong></p>
+			<p><strong>Notes: </strong>{{ download.notes }}</p>
+		</div>
 	{% endfor %}
-	</ul>
 
 	<h2>All Requests</h2>
 	<ul>

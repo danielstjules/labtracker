@@ -145,6 +145,16 @@ ul {
 	padding: 0 20px 10px 20px;
 }
 
+/* div-based info */
+
+.download {
+	background: #e7eff7;
+	border: 1px solid #ADC4DB;
+	padding: 10px;
+	margin-bottom: 20px;
+	width: 558px;
+}
+
 /* messages */
 
 #error_message {
