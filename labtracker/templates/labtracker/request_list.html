@@ -19,10 +19,10 @@
 		{% for req in request_list %}
 			<tr>
 				<td><a href="/labtracker/item/{{ req.item.id }}/">{{ req.item.name }}</a></td>
-				<td><a href="/labtracker/request/{{ req.id }}/">{{ req.status }}</a></td>
+				<td>{{ req.status }}</a></td>
 				<td>{{ req.date_submitted }}</td>
 				<td>{{ req.date_updated}}</td>
-				<td><a href="/labtracker/item/{{ req.item.id }}/">View Details</a></td>
+				<td><a href="/labtracker/request/{{ req.id }}/">View Details</a></td>
 			</tr>
 		{% endfor %}
 		</tbody>
