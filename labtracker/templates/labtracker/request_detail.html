@@ -1,31 +1,35 @@
 {% extends 'base.html' %} 
 {% block title %}labtracker | {{ req }}{% endblock %}
-{% block h1_title %}<h1>{{ req.item.name }}</h1>{% endblock %}
+{% block h1_title %}<h1>{{ req }}</h1>{% endblock %}
 
 {% block content %}
 
 {% if user.is_authenticated %}
-	<h2>Request Details:</h2>
+	<h2>Details:</h2>
 	
 	<div>
-		<p>User: {{req.user.username}}</p>	
-		<p>Date Submitted: {{req.date_submitted}}</p>
-		<p>Last Status Update: {{req.date_updated}}</p>
-		{%if req.date_approved %} <p>Date Approved: {{req.date_approved}}</p> {%endif%}
-		{%if req.date_declined %} <p>Date Declined: {{req.date_declined}}</p> {%endif%}
-		{%if req.date_active %} <p>Date Active: {{req.date_active}}</p> {%endif%}
-		{%if req.date_completed %} <p>Date Completed: {{req.date_completed}}</p> {%endif%}
-
-	</div>
-	
-	<h2>NOTES:</h2>
-	<div>
-		<p>{{req.notes}}</p>
+		<p>
+			<strong>User:</strong> {{req.user.username}}<br />
+			<strong>Date Submitted:</strong> {{req.date_submitted}}<br />
+			<strong>Last Status Update:</strong> {{req.date_updated}}<br />
+			{%if req.date_approved %} <strong>Date Approved:</strong> {{req.date_approved}}<br />{%endif%}
+			{%if req.date_declined %} <strong>Date Declined:</strong> {{req.date_declined}}<br />{%endif%}
+			{%if req.date_active %} <strong>Date Active:</strong> {{req.date_active}}<br />{%endif%}
+			{%if req.date_completed %} <strong>Date Completed:</strong> {{req.date_completed}}<br />{%endif%}
+			<strong>Notes:</strong> {{req.notes}}
+		</p>
 	</div>
 
-	<h2>STATUS:</h2>
+	{% if user.is_authenticated and user.is_superuser %}
+	<h2>Change Status:</h2>
 	<div>
-		{{req.status}}
+		<p>Coming soon..</p>
+	</div>
+	{% endif %}
+
+	<h2>Comments:</h2>
+	<div>
+		<p>To do..</p>
 	</div>
 
 {% else %}

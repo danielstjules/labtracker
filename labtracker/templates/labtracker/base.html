@@ -38,11 +38,9 @@
 	{% if user.is_authenticated and not user.is_superuser %}
 		{% if unread_number == 1 %}
 			Hello, <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> request.
-		{% endif %}
-		{% if unread_number > 1 %}
+		{% elif unread_number > 1 %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> requests.
-		{% endif %}
-		{% if unread_number == 0 %}
+		{% else %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have no updated requests.
 		{% endif %}
 	
@@ -50,11 +48,9 @@
 
 		{% if pending_requests_nr == 1 %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> request.
-		{% endif %}
-		{% if pending_requests_nr > 1 %}
+		{% elif pending_requests_nr > 1 %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> requests.
-		{% endif %}
-		{% if pending_requests_nr == 0 %}
+		{% else %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have no pending requests.
 		{% endif %}
 
