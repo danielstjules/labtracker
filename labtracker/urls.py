@@ -8,5 +8,6 @@ urlpatterns = patterns('labtracker.views',
     url(r'^request/(?P<request_id>\d+)/$', 'request_detail'),
     url(r'^login/$', 'login_user'),
     url(r'^requests/$', 'request_list'),
+    url(r'^requests_admin/$', 'admin_request_list'),
     url(r'^logout/$', 'logout_user'),
 )

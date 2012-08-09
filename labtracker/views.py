@@ -39,10 +39,17 @@ def submit_request(request, item_id):
                                context_instance = RequestContext(request))
 
 def request_list(request):
-    """View a list of requests"""
+    """View a list of requests for the current user"""
     request_list = Request.objects.filter(user = request.user.id)
     return render_to_response('labtracker/request_list.html', {'request_list': request_list},
                                context_instance=RequestContext(request))
+
+def admin_request_list(request):
+    """View a list of all requests (admin view) """
+    request_list = Request.objects.all()
+    return render_to_response('labtracker/request_list_admin.html', {'request_list': request_list},
+                               context_instance=RequestContext(request))    
+
 
 def request_detail(request, request_id):
     """View details of a request"""
