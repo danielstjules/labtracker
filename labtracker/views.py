@@ -24,6 +24,8 @@ def item_list(request, page = 1):
 def item_detail(request, item_id):
     """View details of an item"""
     i = get_object_or_404(Item, pk = item_id)
+    i.views += 1
+    i.save()
     return render_to_response('labtracker/item_detail.html', {'item': i},
                                context_instance=RequestContext(request))
 
