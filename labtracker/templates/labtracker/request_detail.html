@@ -1,9 +1,35 @@
 {% extends 'base.html' %} 
-{% block title %}labtracker | {{ request }}{% endblock %}
-{% block h1_title %}<h1>{{ request }}</h1>{% endblock %}
+{% block title %}labtracker | {{ req }}{% endblock %}
+{% block h1_title %}<h1>{{ req.item.name }}</h1>{% endblock %}
 
 {% block content %}
 
-Request details...
+{% if user.is_authenticated %}
+	<h2>Request Details:</h2>
+	
+	<div>
+		<p>User: {{req.user.username}}</p>	
+		<p>Date Submitted: {{req.date_submitted}}</p>
+		<p>Last Status Update: {{req.date_updated}}</p>
+		{%if req.date_approved %} <p>Date Approved: {{req.date_approved}}</p> {%endif%}
+		{%if req.date_declined %} <p>Date Declined: {{req.date_declined}}</p> {%endif%}
+		{%if req.date_active %} <p>Date Active: {{req.date_active}}</p> {%endif%}
+		{%if req.date_completed %} <p>Date Completed: {{req.date_completed}}</p> {%endif%}
+
+	</div>
+	
+	<h2>NOTES:</h2>
+	<div>
+		<p>{{req.notes}}</p>
+	</div>
+
+	<h2>STATUS:</h2>
+	<div>
+		{{req.status}}
+	</div>
+
+{% else %}
+	<p>You need to be logged in to view this page.</p>
+{% endif %}
 
 {% endblock %}
