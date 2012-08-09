@@ -37,30 +37,30 @@
 	<div id="notifications">
 	{% if user.is_authenticated and not user.is_superuser %}
 		{% if unread_number == 1 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> request.
+			Hello, <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> request.
 		{% endif %}
 		{% if unread_number > 1 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> requests.
 		{% endif %}
 		{% if unread_number == 0 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have no updated requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have no updated requests.
 		{% endif %}
 	
 	{% elif user.is_authenticated and user.is_superuser %}
 
 		{% if pending_requests_nr == 1 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> request.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> request.
 		{% endif %}
 		{% if pending_requests_nr > 1 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> requests.
 		{% endif %}
 		{% if pending_requests_nr == 0 %}
-			Hello, <font color = #00BFFF >{{ user_name }}</font>. You have no pending requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have no pending requests.
 		{% endif %}
 
 	{% else %}
 		labtracker is an online tool for keeping track of lab equipment and use
-	{% endif  %}	
+	{% endif %}	
 	</div>
 	<div id="content">
 		{% block h1_title %}{% endblock %}
