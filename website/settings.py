@@ -159,4 +159,6 @@ LOGGING = {
 
 TEMPLATE_CONTEXT_PROCESSORS += (
 "labtracker.context_processors.unread_processor",
+"labtracker.context_processors.username_processor",
+"labtracker.context_processors.pending_requests_nr_processor",
 )
