@@ -20,17 +20,28 @@
 		</p>
 	</div>
 
-	{% if user.is_authenticated and user.is_superuser %}
-	<h2>Change Status:</h2>
-	<div>
-		<p>Coming soon..</p>
-	</div>
-	{% endif %}
+{% if user.is_authenticated and not user.is_superuser %}
+		<div>
+			{{req.status}}
+		</div>
+	{% elif user.is_authenticated and user.is_superuser %}	
+		<div>
+			<form action="/labtracker/request/{{ request.id }}/request_modify/" method="post">
+				{% csrf_token %}
+				<select name = "choice" id ="choice_id">
+					<option value = "{{req.status}}">(current){{req.status}}</option>
+					{% for a,b in req.STATUS_CHOICES %}
+						{% if a != req.status %}
+							<option value="{{a}}">{{a}}</option>
+						{% endif %}	
+					{% endfor %}
+				</select>
+				<br/>
+				<input type="submit" value="Change Status" />	
+			</form>	
+		</div>
 
-	<h2>Comments:</h2>
-	<div>
-		<p>To do..</p>
-	</div>
+	{% endif %}	
 
 {% else %}
 	<p>You need to be logged in to view this page.</p>
