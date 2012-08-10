@@ -173,12 +173,16 @@ ul {
 
 /* forms */
 
-input, textarea {
+input, textarea, select {
 	margin: 10px 0;
 	padding: 2px;
 	border: 1px solid #d5d5d5;
 	background: #fff;
 	font-size: 10pt;
+}
+
+option.selected {
+	font-weight: bold;
 }
 
 #login_form label {

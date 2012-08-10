@@ -5,7 +5,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-	<h2>Details:</h2>
+	<h2>Details</h2>
 	
 	<div>
 		<p>
@@ -20,27 +20,22 @@
 		</p>
 	</div>
 
-{% if user.is_authenticated and not user.is_superuser %}
+	{% if user.is_superuser %}
+		<h2>Change Status</h2>	
 		<div>
-			{{req.status}}
-		</div>
-	{% elif user.is_authenticated and user.is_superuser %}	
-		<div>
-			<form action="/labtracker/request/{{ request.id }}/request_modify/" method="post">
+			<form action="/labtracker/request/{{ req.id }}/request_modify/" method="post">
 				{% csrf_token %}
-				<select name = "choice" id ="choice_id">
-					<option value = "{{req.status}}">(current){{req.status}}</option>
+				<select name="choice" id="choice_id" onchange="javascript: submit(this);">
 					{% for a,b in req.STATUS_CHOICES %}
 						{% if a != req.status %}
 							<option value="{{a}}">{{a}}</option>
+						{% else %}
+							<option class="selected" value="{{a}}" selected="selected">{{a}}</option>
 						{% endif %}	
 					{% endfor %}
-				</select>
-				<br/>
-				<input type="submit" value="Change Status" />	
+				</select>	
 			</form>	
 		</div>
-
 	{% endif %}	
 
 {% else %}
