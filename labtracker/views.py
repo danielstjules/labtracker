@@ -38,6 +38,17 @@ def submit_request(request, item_id):
     fwd_page = '/labtracker/item/' + item_id
     req = Request.objects.create(item = item, status = "pending", notes = p["notes"], user = request.user)
     return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
+                               context_instance = RequestContext(request))    
+
+def modify_request_status(request, request_id):
+    p = request.POST
+    req = Request.objects.get(pk = request_id)
+    message = {'type': 'success_message', 'text': "Request Status changed sucessfully to: "+p.get('choice')}
+    template = 'forward.html'
+    fwd_page = '/labtracker/requests_admin/'
+    req.status = p.get('choice')
+    req.save()
+    return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
 
 def request_list(request):
