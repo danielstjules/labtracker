@@ -42,6 +42,10 @@ a, a:link, a:visited, a:active, a:hover {
 	color: #1d88e5;
 }
 
+.notif{
+	color: #FF0000;
+}
+
 .clear { 
 	clear: both; 
 }

@@ -13,9 +13,19 @@
 	<strong>Asset Number:</strong> {{ item.asset_num }}<br />
 	<strong>Notes:</strong> {{ item.notes }}<br />
 	<strong>Views:</strong> {{ item.views }}<br /></p>
+	
+	{% if req_list %}	
+		<span class = "notif">Please note this item is currently in use by:</span> 
+		{% for req in req_list %}
+			<span class ="username">{{req.user.username}} </span>
+		{% endfor %}
+		<br/>
+		<br/>
+	{% endif %}
 
 {% if user.is_authenticated %}
 	<h2>Request</h2>
+	
 	<form action="/labtracker/item/{{ item.id }}/request/" method="post">
 	{% csrf_token %}
 		<label for="notes">Notes</label><br />

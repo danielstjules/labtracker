@@ -24,9 +24,10 @@ def item_list(request, page = 1):
 def item_detail(request, item_id):
     """View details of an item"""
     i = get_object_or_404(Item, pk = item_id)
+    req_list = Request.objects.filter(item = i, status = 'active')
     i.views += 1
     i.save()
-    return render_to_response('labtracker/item_detail.html', {'item': i},
+    return render_to_response('labtracker/item_detail.html', {'item': i, 'req_list': req_list}, 
                                context_instance=RequestContext(request))
 
 def submit_request(request, item_id):
@@ -67,9 +68,11 @@ def admin_request_list(request):
 def request_detail(request, request_id):
     """View details of a request"""
     req = get_object_or_404(Request, pk = request_id)
+    item = Item.objects.get(pk = req.item.id)
+    req_list = Request.objects.filter(item = item, status = 'active')
     if request.user == req.user:
         req.mark_read()
-    return render_to_response('labtracker/request_detail.html', {'req': req},
+    return render_to_response('labtracker/request_detail.html', {'req': req, 'req_list' : req_list},
                                context_instance=RequestContext(request))
 
 def login_user(request):
