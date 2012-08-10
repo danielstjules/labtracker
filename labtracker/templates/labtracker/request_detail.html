@@ -16,6 +16,15 @@
 			{%if req.date_declined %} <strong>Date Declined:</strong> {{req.date_declined}}<br />{%endif%}
 			{%if req.date_active %} <strong>Date Active:</strong> {{req.date_active}}<br />{%endif%}
 			{%if req.date_completed %} <strong>Date Completed:</strong> {{req.date_completed}}<br />{%endif%}
+			
+			{% if req_list %}	
+				<span class = "notif">Please note this item is currently in use by:</span> 
+			{% for req in req_list %}
+				<span class ="username">{{req.user.username}} </span>
+			{% endfor %}
+			<br/>
+			{% endif %}
+
 			<strong>Notes:</strong> {{req.notes}}
 		</p>
 	</div>
