@@ -53,6 +53,7 @@ def modify_request_status(request, request_id):
                                context_instance = RequestContext(request))
 
 def post_comment(request, request_id):
+    """Post a user comment on request_details page"""
     p = request.POST
     req = Request.objects.get(pk = request_id)
     comment = Comment.objects.create(user = request.user, request= req, content = p["comment"])
@@ -80,7 +81,7 @@ def request_detail(request, request_id):
     req = get_object_or_404(Request, pk = request_id)
     item = Item.objects.get(pk = req.item.id)
     req_list = Request.objects.filter(item = item, status = 'active')
-    comment_list = Comment.objects.filter(request = req)
+    comment_list = Comment.objects.filter(request = req).order_by('-date_submitted')
     if request.user == req.user:
         req.mark_read()
     return render_to_response('labtracker/request_detail.html', {'req': req, 'req_list' : req_list, 'comment_list' : comment_list},
