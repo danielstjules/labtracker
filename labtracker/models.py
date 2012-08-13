@@ -73,3 +73,12 @@ class Request(models.Model):
     was_submitted_recently.admin_order_field = 'submitted'
     was_submitted_recently.boolean = True
     was_submitted_recently.short_description = 'Submitted Recently?'
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True)
+    request = models.ForeignKey(Request, blank=True, null=True)
+    date_submitted = models.DateTimeField('submission date', auto_now_add=True)
+    content = models.TextField(blank = True)
+
+    def __unicode__(self):
+        return self.id    

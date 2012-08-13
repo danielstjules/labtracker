@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from labtracker.models import Request, Item, Download
+from labtracker.models import Request, Item, Download, Comment
 from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -52,6 +52,16 @@ def modify_request_status(request, request_id):
     return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))
 
+def post_comment(request, request_id):
+    p = request.POST
+    req = Request.objects.get(pk = request_id)
+    comment = Comment.objects.create(user = request.user, request= req, content = p["comment"])
+    message = {'type': 'success_message', 'text': "Your comment has been posted sucessfully "}
+    template = 'forward.html'
+    fwd_page = '/labtracker/request/'+request_id+'/'
+    return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
+                               context_instance = RequestContext(request))    
+
 def request_list(request):
     """View a list of requests for the current user"""
     request_list = Request.objects.filter(user = request.user.id)
@@ -70,9 +80,10 @@ def request_detail(request, request_id):
     req = get_object_or_404(Request, pk = request_id)
     item = Item.objects.get(pk = req.item.id)
     req_list = Request.objects.filter(item = item, status = 'active')
+    comment_list = Comment.objects.filter(request = req)
     if request.user == req.user:
         req.mark_read()
-    return render_to_response('labtracker/request_detail.html', {'req': req, 'req_list' : req_list},
+    return render_to_response('labtracker/request_detail.html', {'req': req, 'req_list' : req_list, 'comment_list' : comment_list},
                                context_instance=RequestContext(request))
 
 def login_user(request):
