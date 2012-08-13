@@ -46,6 +46,10 @@ a, a:link, a:visited, a:active, a:hover {
 	color: #FF0000;
 }
 
+.date{
+	font-size:10px;
+}
+
 .clear { 
 	clear: both; 
 }
@@ -94,6 +98,19 @@ p { padding-bottom: 10px; }
 	width: 920px;
 	margin: 0 auto;
 	background: #f7f7f7 url('container.jpg') bottom no-repeat;
+}
+
+#commentbox {
+	width: 350px;
+	border-width: 1px;
+	border-style:solid;
+	border-color:#D8D8D8;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin: 1px;
+	background: bottom no-repeat;
 }
 
 #notifications {

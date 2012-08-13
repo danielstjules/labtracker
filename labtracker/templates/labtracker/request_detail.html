@@ -46,6 +46,27 @@
 			</form>	
 		</div>
 	{% endif %}	
+	 <br/>
+	 <h2>Comments</h2>
+	{% if comment_list %}
+		{% for comment in comment_list %}
+			<div id ="commentbox">
+				<span class ="username">{{comment.user.username}}</span> on <span class="date">{{comment.date_submitted}}</span> posted:
+				<br/>
+				{{comment.content}}	
+			</div>
+			<br/>
+		{% endfor %}
+	{% endif %}
+
+	<form action="/labtracker/request/{{ req.id }}/request/comment_submit/" method="post">
+	{% csrf_token %}
+		<label for="notes">Post a comment</label><br />
+		<textarea name="comment" id="comment" cols="42"></textarea>
+		
+		<br />
+		<input type="submit" value="Post comment" />
+	</form>
 
 {% else %}
 	<p>You need to be logged in to view this page.</p>
