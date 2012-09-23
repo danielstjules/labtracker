@@ -1,5 +1,7 @@
 from django.db import models
 import datetime
+from django.utils.timezone import utc
+from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -46,8 +48,8 @@ class Request(models.Model):
     read = models.BooleanField(default=True)
     notes = models.TextField(blank=True)
 
-    date_submitted = models.DateTimeField(auto_now_add=True)
-    date_updated = models.DateTimeField('last modified date', auto_now=True)
+    date_submitted = models.DateTimeField()
+    date_updated = models.DateTimeField('last modified date')
     date_approved = models.DateTimeField(blank=True, null=True)
     date_active = models.DateTimeField('started use', blank=True, null=True)
     date_completed = models.DateTimeField('finished use', blank=True, null=True)
@@ -57,15 +59,22 @@ class Request(models.Model):
         return "[" + self.status + "] " + str(self.item)
 
     def save(self, *args, **kwargs):
+        self.date_updated = datetime.utcnow().replace(tzinfo=utc)
         if self.pk is not None:
             orig = Request.objects.get(pk=self.pk)
             if not(orig.read == False and self.read == True):
                 if self.date_submitted != self.date_updated:
                     self.read = False
+        else:
+            self.date_submitted = datetime.utcnow().replace(tzinfo=utc)
         super(Request, self).save(*args, **kwargs)
 
     def mark_read(self):
         self.read = True
+        super(Request, self).save()
+
+    def mark_unread(self):
+        self.read = False
         super(Request, self).save()
 
     def was_submitted_recently(self):
@@ -81,4 +90,4 @@ class Comment(models.Model):
     content = models.TextField(blank = True)
 
     def __unicode__(self):
-        return self.id    
+        return self.id

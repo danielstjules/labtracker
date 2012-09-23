@@ -10,8 +10,9 @@
 	<div>
 		<p>
 			<strong>User:</strong> {{req.user.username}}<br />
+			<strong>Item:</strong> <a href="/labtracker/item/{{ req.item.id }}/">{{ req.item.name }}</a><br />
 			<strong>Date Submitted:</strong> {{req.date_submitted}}<br />
-			<strong>Last Status Update:</strong> {{req.date_updated}}<br />
+			<strong>Last Updated:</strong> {{req.date_updated}}<br />
 			{%if req.date_approved %} <strong>Date Approved:</strong> {{req.date_approved}}<br />{%endif%}
 			{%if req.date_declined %} <strong>Date Declined:</strong> {{req.date_declined}}<br />{%endif%}
 			{%if req.date_active %} <strong>Date Active:</strong> {{req.date_active}}<br />{%endif%}

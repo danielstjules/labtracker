@@ -9,6 +9,8 @@ def unread_processor(request):
 	).count()
     return {'unread_number': unread_number} 
 
-def pending_requests_nr_processor(request):
-    pending_requests_nr = Request.objects.filter(status = 'pending').count()
-    return {'pending_requests_nr': pending_requests_nr}        
+def open_requests_processor(request):
+    open_requests_number = Request.objects.filter(
+		Q(status = 'pending') | Q(status = 'approved') | Q(status = 'active'),
+	).count()
+    return {'open_requests_number': open_requests_number}

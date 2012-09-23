@@ -11,15 +11,15 @@
 				<th scope="col">Item</th>
 				<th scope="col">Approval Status</th>
 				<th scope="col">Date Submitted</th>
-				<th scope="col">Date Updated</th>
+				<th scope="col">Last Updated</th>
 				<th scope="col"></th>
 			</tr>
 		</thead>
 		<tbody>
 		{% for req in request_list %}
 			<tr>
-				<td><a href="/labtracker/item/{{ req.item.id }}/">{{ req.item.name }}</a></td>
-				<td>{{ req.status }}</a></td>
+				<td>{{ req.item.name }}</td>
+				<td>{{ req.status }}</td>
 				<td>{{ req.date_submitted }}</td>
 				<td>{{ req.date_updated}}</td>
 				<td><a href="/labtracker/request/{{ req.id }}/">View Details</a></td>

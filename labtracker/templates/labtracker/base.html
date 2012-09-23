@@ -46,12 +46,12 @@
 	
 	{% elif user.is_authenticated and user.is_superuser %}
 
-		{% if pending_requests_nr == 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> request.
-		{% elif pending_requests_nr > 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests_admin/">{{ pending_requests_nr }} pending</a> requests.
+		{% if open_requests_number == 1 %}
+			Hello,  <span class = "username">{{ user.username }}</span>. There is <a href="/labtracker/requests_admin/">{{ open_requests_number }} open</a> request.
+		{% elif open_requests_number > 1 %}
+			Hello,  <span class = "username">{{ user.username }}</span>. There are <a href="/labtracker/requests_admin/">{{ open_requests_number }} open</a> requests.
 		{% else %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have no pending requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. There are no open requests.
 		{% endif %}
 
 	{% else %}

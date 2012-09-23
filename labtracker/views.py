@@ -60,6 +60,8 @@ def post_comment(request, request_id):
     message = {'type': 'success_message', 'text': "Your comment has been posted sucessfully "}
     template = 'forward.html'
     fwd_page = '/labtracker/request/'+request_id+'/'
+    if request.user != req.user:
+        req.mark_unread()
     return render_to_response(template, {message['type'] : message['text'], 'title' : 'Sucessful', 'fwd_page' : fwd_page},
                                context_instance = RequestContext(request))    
 
