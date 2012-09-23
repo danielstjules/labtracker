@@ -3,19 +3,19 @@
 
 {% block content %}
 {% if item_list %}
-	<div class="pagination" id="top_pag">
-		<span class="step-links">
-		{% if item_list.has_previous %}
-			<a href="/labtracker/{{ item_list.previous_page_number }}/">previous</a>
-		{% endif %}
-			<span class="current">
-				Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
-			</span>
-		{% if item_list.has_next %}
-			<a href="/labtracker/{{ item_list.next_page_number }}/">next</a>
-		{% endif %}
-		</span>
-	</div>
+    <div class="pagination" id="top_pag">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="/labtracker/{{ page_obj.previous_page_number }}/">previous</a>
+        {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+            </span>
+        {% if page_obj.has_next %}
+            <a href="/labtracker/{{ page_obj.next_page_number }}/">next</a>
+        {% endif %}
+        </span>
+    </div>
 
 	<table id="equipment_list" summary="Equipment List">
 	<thead>
@@ -40,19 +40,19 @@
 	</tbody>
 	</table>
 
-	<div class="pagination" id="bottom_pag">
-		<span class="step-links">
-		{% if item_list.has_previous %}
-			<a href="/labtracker/{{ item_list.previous_page_number }}/">previous</a>
-		{% endif %}
-			<span class="current">
-				Page {{ item_list.number }} of {{ item_list.paginator.num_pages }}.
-			</span>
-		{% if item_list.has_next %}
-			<a href="/labtracker/{{ item_list.next_page_number }}/">next</a>
-		{% endif %}
-		</span>
-	</div>
+    <div class="pagination" id="bottom_pag">
+        <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="/labtracker/{{ page_obj.previous_page_number }}/">previous</a>
+        {% endif %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+            </span>
+        {% if page_obj.has_next %}
+            <a href="/labtracker/{{ page_obj.next_page_number }}/">next</a>
+        {% endif %}
+        </span>
+    </div>
 
 {% else %}
 	<p>No items are available.</p>
