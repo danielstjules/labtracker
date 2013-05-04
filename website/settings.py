@@ -12,12 +12,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'labdb',                      # Or path to database file if using sqlite3.
-        'USER': 'db_user',                      # Not used with sqlite3.
-        'PASSWORD': 'changeme',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'labdb',
+        'USER': 'db_user',
+        'PASSWORD': 'changeme',
+        'HOST': '',                            # Set to empty string for localhost.
+        'PORT': '',                            # Set to empty string for default.
     }
 }
 
@@ -78,17 +78,17 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'z@+e=#h5e6xx6v$=bpmxvdzul2n1d97p6@q9mf$+08+q)r@3t&amp;'
+SECRET_KEY = 'GENERATE_UNIQUE_KEY_HERE'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -107,8 +107,8 @@ ROOT_URLCONF = 'website.urls'
 WSGI_APPLICATION = 'website.wsgi.application'
 
 TEMPLATE_DIRS = (
-    "/www/labtracker/labtracker/templates/labtracker",
-    "www/labtracker/templates"
+    "/www/labtracker/templates/labtracker",
+    "/www/labtracker/templates"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -158,8 +158,8 @@ LOGGING = {
 }
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-"labtracker.context_processors.unread_processor",
-"labtracker.context_processors.open_requests_processor",
-"django.core.context_processors.request",
-"django.contrib.auth.context_processors.auth",
+    "labtracker.context_processors.unread_processor",
+    "labtracker.context_processors.open_requests_processor",
+    "django.core.context_processors.request",
+    "django.contrib.auth.context_processors.auth",
 )

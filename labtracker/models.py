@@ -1,14 +1,16 @@
 from django.db import models
-import datetime
 from django.utils.timezone import utc
 from datetime import datetime
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
 class Item(models.Model):
-    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=100)
     location = models.CharField(max_length=100, blank=True)
     local_num = models.CharField(max_length=50, blank=True)
+    cfi = models.CharField(max_length=20, blank=True)
+    part_class = models.CharField(max_length=50, blank=True)
     company = models.CharField(max_length=100, blank=True)
     part_num = models.CharField(max_length=50, blank=True)
     serial_num = models.CharField(max_length=50, blank=True)
@@ -18,6 +20,7 @@ class Item(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Download(models.Model):
     item = models.ForeignKey(Item)
@@ -33,6 +36,7 @@ class Download(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Request(models.Model):
     item = models.ForeignKey(Item)
@@ -62,7 +66,7 @@ class Request(models.Model):
         self.date_updated = datetime.utcnow().replace(tzinfo=utc)
         if self.pk is not None:
             orig = Request.objects.get(pk=self.pk)
-            if not(orig.read == False and self.read == True):
+            if orig.read or not self.read:
                 if self.date_submitted != self.date_updated:
                     self.read = False
         else:
@@ -83,11 +87,12 @@ class Request(models.Model):
     was_submitted_recently.boolean = True
     was_submitted_recently.short_description = 'Submitted Recently?'
 
+
 class Comment(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     request = models.ForeignKey(Request, blank=True, null=True)
     date_submitted = models.DateTimeField('submission date', auto_now_add=True)
-    content = models.TextField(blank = True)
+    content = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.id
