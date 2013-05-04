@@ -1,3 +1,4 @@
+website/settings.py
 *.pyc
 *.db
 /static/

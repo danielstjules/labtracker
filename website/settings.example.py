@@ -12,12 +12,12 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'labdb',
         'USER': 'db_user',
         'PASSWORD': 'changeme',
-        'HOST': '',                            # Set to empty string for localhost.
-        'PORT': '',                            # Set to empty string for default.
+        'HOST': '',              # Set to empty string for localhost.
+        'PORT': '',              # Set to empty string for default.
     }
 }
 
@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'website.wsgi.application'
 TEMPLATE_DIRS = (
     "/www/labtracker/templates/labtracker",
     "/www/labtracker/templates"
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Put strings here, like "/home/html/django_templates"
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
