@@ -17,19 +17,19 @@
 	<div id="logo"></div>
 	<div id="topnav">
 		{% if not user.is_authenticated %}
-			<a href="/labtracker/login/">Log in</a>
+			<a href="/login/">Log in</a>
 		{% endif %}	
 		{% if user.is_authenticated %}
-			<a href="/labtracker/logout/">Logout</a>
+			<a href="/logout/">Logout</a>
 		{% endif %}
 		{% if user.is_authenticated and not user.is_superuser %}
-			<a href="/labtracker/requests/">My Requests</a>
+			<a href="/requests/">My Requests</a>
 		{% endif %}
 		{% if user.is_superuser and user.is_authenticated %}
-			<a href="/labtracker/requests_admin/">View Requests</a>
+			<a href="/requests_admin/">View Requests</a>
 			<a href="/admin/">Administration</a>
 		{% endif %}	
-		<a href="/labtracker/">Home</a>
+		<a href="/">Home</a>
 	</div>
 </div>
 
@@ -37,9 +37,9 @@
 	<div id="notifications">
 	{% if user.is_authenticated and not user.is_superuser %}
 		{% if unread_number == 1 %}
-			Hello, <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> request.
+			Hello, <span class = "username">{{ user.username }}</span>. You have <a href="/requests/">{{ unread_number }} updated</a> request.
 		{% elif unread_number > 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/labtracker/requests/">{{ unread_number }} updated</a> requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/requests/">{{ unread_number }} updated</a> requests.
 		{% else %}
 			Hello,  <span class = "username">{{ user.username }}</span>. You have no updated requests.
 		{% endif %}
@@ -47,9 +47,9 @@
 	{% elif user.is_authenticated and user.is_superuser %}
 
 		{% if open_requests_number == 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. There is <a href="/labtracker/requests_admin/">{{ open_requests_number }} open</a> request.
+			Hello,  <span class = "username">{{ user.username }}</span>. There is <a href="/requests_admin/">{{ open_requests_number }} open</a> request.
 		{% elif open_requests_number > 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. There are <a href="/labtracker/requests_admin/">{{ open_requests_number }} open</a> requests.
+			Hello,  <span class = "username">{{ user.username }}</span>. There are <a href="/requests_admin/">{{ open_requests_number }} open</a> requests.
 		{% else %}
 			Hello,  <span class = "username">{{ user.username }}</span>. There are no open requests.
 		{% endif %}

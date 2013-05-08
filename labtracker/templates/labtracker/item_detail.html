@@ -26,7 +26,7 @@
 {% if user.is_authenticated %}
 	<h2>Request</h2>
 	
-	<form action="/labtracker/item/{{ item.id }}/request/" method="post">
+	<form action="/item/{{ item.id }}/request/" method="post">
 	{% csrf_token %}
 		<label for="notes">Notes</label><br />
 		<textarea name="notes" id="notes"></textarea>
@@ -49,7 +49,7 @@
 	<h2>All Requests</h2>
 	<ul>
 	{% for request in item.request_set.all %}
-		<li><a href="/labtracker/request/{{ request.id }}/">{{ request }}</a></li>
+		<li><a href="/request/{{ request.id }}/">{{ request }}</a></li>
 	{% endfor %}
 	</ul>
 

@@ -3,7 +3,7 @@
 {% block h1_title %}<h1>Log In</h1>{% endblock %}
 
 {% block content %}
-	<form action="/labtracker/login/" method="post" id="login_form">
+	<form action="/login/" method="post" id="login_form">
 		{% csrf_token %}
 		{% if next %}
 		<input type="hidden" name="next" value="{{ next }}" />
