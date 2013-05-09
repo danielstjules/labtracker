@@ -63,14 +63,32 @@ class Request(models.Model):
         return "[" + self.status + "] " + str(self.item)
 
     def save(self, *args, **kwargs):
-        self.date_updated = datetime.utcnow().replace(tzinfo=utc)
+        current_datetime = datetime.utcnow().replace(tzinfo=utc)
+        self.date_updated = current_datetime
+
         if self.pk is not None:
+            # If there was an existing request, need to update its dates
             orig = Request.objects.get(pk=self.pk)
+
+            # Change its read status for the admin
             if orig.read or not self.read:
                 if self.date_submitted != self.date_updated:
                     self.read = False
+
+            # Update the corresponding dates given a status change
+            if orig.status != self.status:
+                if self.status == 'approved':
+                    self.date_approved = current_datetime
+                elif self.status == 'active':
+                    self.date_active = current_datetime
+                elif self.status == 'completed':
+                    self.date_completed = current_datetime
+                elif self.status == 'declined':
+                    self.date_declined = current_datetime
+
         else:
-            self.date_submitted = datetime.utcnow().replace(tzinfo=utc)
+            # If this is a new request, then just set its submission date
+            self.date_submitted = current_datetime
         super(Request, self).save(*args, **kwargs)
 
     def mark_read(self):
