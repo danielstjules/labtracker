@@ -81,6 +81,11 @@ class Request(models.Model):
         self.read = False
         super(Request, self).save()
 
+    def is_inactive(self):
+        if self.status == 'completed' or self.status == 'declined':
+            return True
+        return False
+
     def was_submitted_recently(self):
         return self.date_submitted >= timezone.now() - datetime.timedelta(days=1)
     was_submitted_recently.admin_order_field = 'submitted'

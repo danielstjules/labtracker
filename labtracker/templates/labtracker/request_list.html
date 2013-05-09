@@ -17,13 +17,17 @@
 		</thead>
 		<tbody>
 		{% for req in request_list %}
-			<tr>
-				<td>{{ req.item.description }}</td>
-				<td>{{ req.status }}</td>
-				<td>{{ req.date_submitted }}</td>
-				<td>{{ req.date_updated}}</td>
-				<td><a href="/request/{{ req.id }}/">View Details</a></td>
-			</tr>
+			{% if req.is_inactive %}
+				<tr class="inactive">
+			{% else %}
+				<tr>
+			{% endif %}
+					<td>{{ req.item.description }}</td>
+					<td>{{ req.status }}</td>
+					<td>{{ req.date_submitted }}</td>
+					<td>{{ req.date_updated}}</td>
+					<td><a href="/request/{{ req.id }}/">View Details</a></td>
+				</tr>
 		{% endfor %}
 		</tbody>
 		</table>
