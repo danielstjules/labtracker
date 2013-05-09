@@ -19,7 +19,7 @@ class Item(models.Model):
     views = models.PositiveSmallIntegerField(default=0)
 
     def __unicode__(self):
-        return self.name
+        return self.description
 
 
 class Download(models.Model):
