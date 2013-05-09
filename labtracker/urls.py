@@ -1,9 +1,9 @@
-from django.conf.urls import patterns, include, url
-from django.views.generic import DetailView, ListView
-from django.conf.urls.defaults import *
-from labtracker.models import Request, Item, Download, Comment
+from django.conf.urls import patterns, url
+from django.views.generic import ListView
+from labtracker.models import Request, Item
 
-urlpatterns = patterns('labtracker.views',
+urlpatterns = patterns(
+    'labtracker.views',
     url(r'^((?P<page>\d+)/)?$',
         ListView.as_view(
             queryset=Item.objects.all(),
