@@ -5,52 +5,82 @@
 {% block content %}
 
 	<h2>Details</h2>
-	<p><strong>Location:</strong> {{ item.location }}<br />
-	<strong>Local Number:</strong> {{ item.local_num }}<br />
-	<strong>Company:</strong> {{ item.company }}<br />
-	<strong>Part Number:</strong> {{ item.part_num }}<br />
-	<strong>Serial Number:</strong> {{ item.serial_num }}<br />
-	<strong>Asset Number:</strong> {{ item.asset_num }}<br />
-	<strong>Notes:</strong> {{ item.notes }}<br />
-	<strong>Views:</strong> {{ item.views }}<br /></p>
+	<p>
+		{% if item.local_num %}
+			<strong>Local Number:</strong> {{ item.local_num }}<br />
+		{% endif %}
+		{% if item.part_class %}
+			<strong>Class:</strong> {{ item.part_class }}<br />
+		{% endif %}
+		{% if item.location %}
+			<strong>Location:</strong> {{ item.location }}<br />
+		{% endif %}
+		{% if item.cfi %}
+			<strong>CFI:</strong> {{ item.cfi }}<br />
+		{% endif %}
+		{% if item.company %}
+			<strong>Company:</strong> {{ item.company }}<br />
+		{% endif %}
+		{% if item.part_num %}
+			<strong>Part Number:</strong> {{ item.part_num }}<br />
+		{% endif %}
+		{% if item.serial_num %}
+			<strong>Serial Number:</strong> {{ item.serial_num }}<br />
+		{% endif %}
+		{% if item.asset_num %}
+			<strong>Asset Number:</strong> {{ item.asset_num }}<br />
+		{% endif %}
+		{% if item.notes %}
+			<strong>Notes:</strong> {{ item.notes }}<br />
+		{% endif %}
+		<strong>Views:</strong> {{ item.views }}<br />
+	</p>
+
+	{% if user.is_superuser and user.is_authenticated %}
+		<p>
+			<a href="/admin/labtracker/item/{{ item.pk }}/">Modify Item Details</a>
+		</p>
+	{% endif %}
 	
 	{% if req_list %}	
-		<span class = "notif">Please note this item is currently in use by:</span> 
-		{% for req in req_list %}
-			<span class ="username">{{req.user.username}} </span>
-		{% endfor %}
-		<br/>
-		<br/>
+		<p class="notif">Please note this item is currently in use by:
+			{% for req in req_list %}
+				<span class ="username">{{ req.user.username }}</span>
+			{% endfor %}
+		</p>
 	{% endif %}
 
-{% if user.is_authenticated %}
-	<h2>Request</h2>
-	
-	<form action="/item/{{ item.id }}/request/" method="post">
-	{% csrf_token %}
-		<label for="notes">Notes</label><br />
-		<textarea name="notes" id="notes"></textarea>
-		
-		<br />
-		<input type="submit" value="Request" />
-	</form>
-{% else %}
-	<p>You need to be logged in to submit requests.</p>
-{% endif %}
+	<h2>Request Use</h2>
+	{% if user.is_authenticated %}
+		<form action="/item/{{ item.id }}/request/" method="post">
+			{% csrf_token %}
+			<label for="notes">Request Notes</label><br />
+			<textarea name="notes" id="notes" cols="100" rows="5"></textarea>
+			<br />
+			<input type="submit" value="Request" />
+		</form>
+	{% else %}
+		<p>You need to be logged in to submit requests.</p>
+	{% endif %}
 
 	<h2>Downloads</h2>
 	{% for download in item.download_set.all %}
 		<div class="download">
-			<p><strong>[{{ download.dtype }}] <a href="{{ download.url }}">{{ download.name }}</a></strong></p>
+			<p>
+				<strong>
+					[{{ download.dtype }}] 
+					<a href="{{ download.url }}">{{ download.name }}</a>
+				</strong>
+			</p>
 			<p><strong>Notes: </strong>{{ download.notes }}</p>
 		</div>
 	{% endfor %}
 
 	<h2>All Requests</h2>
 	<ul>
-	{% for request in item.request_set.all %}
-		<li><a href="/request/{{ request.id }}/">{{ request }}</a></li>
-	{% endfor %}
+		{% for request in item.request_set.all %}
+			<li><a href="/request/{{ request.id }}/">{{ request }}</a></li>
+		{% endfor %}
 	</ul>
 
 {% endblock %}

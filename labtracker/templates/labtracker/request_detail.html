@@ -5,66 +5,72 @@
 {% block content %}
 
 {% if user.is_authenticated %}
-	<h2>Details</h2>
-	
-	<div>
+	<h2>Request Details</h2>
+	<p>
+		<strong>User:</strong> {{req.user.username}}<br />
+		<strong>Item:</strong> <a href="/item/{{ req.item.id }}/">{{ req.item.description }}</a><br />
+		<strong>Date Submitted:</strong> {{req.date_submitted}}<br />
+		<strong>Last Updated:</strong> {{req.date_updated}}<br />
+		{% if req.date_approved %}
+			<strong>Date Approved:</strong> {{req.date_approved}}<br />
+		{% endif %}
+		{% if req.date_declined %}
+			<strong>Date Declined:</strong> {{req.date_declined}}<br />
+		{% endif %}
+		{% if req.date_active %}
+			<strong>Date Active:</strong> {{req.date_active}}<br />
+		{% endif %}
+		{% if req.date_completed %}
+			<strong>Date Completed:</strong> {{req.date_completed}}<br />
+		{% endif %}
+	</p>
+	{% if req.notes %}
+		<br />
 		<p>
-			<strong>User:</strong> {{req.user.username}}<br />
-			<strong>Item:</strong> <a href="/item/{{ req.item.id }}/">{{ req.item.description }}</a><br />
-			<strong>Date Submitted:</strong> {{req.date_submitted}}<br />
-			<strong>Last Updated:</strong> {{req.date_updated}}<br />
-			{%if req.date_approved %} <strong>Date Approved:</strong> {{req.date_approved}}<br />{%endif%}
-			{%if req.date_declined %} <strong>Date Declined:</strong> {{req.date_declined}}<br />{%endif%}
-			{%if req.date_active %} <strong>Date Active:</strong> {{req.date_active}}<br />{%endif%}
-			{%if req.date_completed %} <strong>Date Completed:</strong> {{req.date_completed}}<br />{%endif%}
-			
-			{% if req_list %}	
-				<span class = "notif">Please note this item is currently in use by:</span> 
-			{% for req in req_list %}
-				<span class ="username">{{req.user.username}} </span>
-			{% endfor %}
-			<br/>
-			{% endif %}
-
-			<strong>Notes:</strong> {{req.notes}}
+			<strong>Request Notes:</strong>
 		</p>
-	</div>
+		<blockquote>{{req.notes}}</blockquote>
+	{% endif %}
+
+	{% if req_list %}	
+		<p class="notif">Please note this item is currently in use by:
+			{% for req in req_list %}
+				<span class ="username">{{ req.user.username }}</span>
+			{% endfor %}
+		</p>
+	{% endif %}
 
 	{% if user.is_superuser %}
 		<h2>Change Status</h2>	
-		<div>
-			<form action="/request/{{ req.id }}/request_modify/" method="post">
-				{% csrf_token %}
-				<select name="choice" id="choice_id" onchange="javascript: submit(this);">
-					{% for a,b in req.STATUS_CHOICES %}
-						{% if a != req.status %}
-							<option value="{{a}}">{{a}}</option>
-						{% else %}
-							<option class="selected" value="{{a}}" selected="selected">{{a}}</option>
-						{% endif %}	
-					{% endfor %}
-				</select>	
-			</form>	
-		</div>
+		<form action="/request/{{ req.id }}/request_modify/" method="post">
+			{% csrf_token %}
+			<select name="choice" id="choice_id" onchange="javascript: submit(this);">
+				{% for key,val in req.STATUS_CHOICES %}
+					{% if key != req.status %}
+						<option value="{{key}}">{{val}}</option>
+					{% else %}
+						<option class="selected" value="{{key}}" selected="selected">{{val}}</option>
+					{% endif %}	
+				{% endfor %}
+			</select>	
+		</form>
 	{% endif %}	
-	 <br/>
-	 <h2>Comments</h2>
+
+	<h2>Comments</h2>
 	{% if comment_list %}
 		{% for comment in comment_list %}
-			<div id ="commentbox">
-				<span class ="username">{{comment.user.username}}</span> on <span class="date">{{comment.date_submitted}}</span> posted:
-				<br/>
+			<blockquote>
+				<small><span class="username">{{comment.user.username}}</span> posted on 
+				{{comment.date_submitted}}</small>
 				{{comment.content}}	
-			</div>
-			<br/>
+			</blockquote>
 		{% endfor %}
 	{% endif %}
 
 	<form action="/request/{{ req.id }}/request/comment_submit/" method="post">
-	{% csrf_token %}
-		<label for="notes">Post a comment</label><br />
-		<textarea name="comment" id="comment" cols="42"></textarea>
-		
+		{% csrf_token %}
+		<label for="comment">Post a comment</label><br />
+		<textarea name="comment" id="comment" cols="100" rows="5"></textarea>
 		<br />
 		<input type="submit" value="Post comment" />
 	</form>

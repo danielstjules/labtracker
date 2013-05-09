@@ -5,19 +5,19 @@
 {% block content %}
 {% if user.is_authenticated and user.is_superuser %}
 	{% if request_list %}
-	    <div class="pagination" id="top_pag">
-	        <span class="step-links">
-	        {% if page_obj.has_previous %}
-	            <a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
-	        {% endif %}
-	            <span class="current">
-	                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-	            </span>
-	        {% if page_obj.has_next %}
-	            <a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
-	        {% endif %}
-	        </span>
-	    </div>
+		<div class="pagination top_pag">
+			<span class="step-links">
+			{% if page_obj.has_previous %}
+				<a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
+			{% endif %}
+				<span class="current">
+					Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+				</span>
+			{% if page_obj.has_next %}
+				<a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
+			{% endif %}
+			</span>
+		</div>
 
 		<table id="equipment_list" summary="Equipment List">
 		<thead>
@@ -48,19 +48,19 @@
 		</tbody>
 		</table>
 
-	    <div class="pagination" id="bottom_pag">
-	        <span class="step-links">
-	        {% if page_obj.has_previous %}
-	            <a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
-	        {% endif %}
-	            <span class="current">
-	                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-	            </span>
-	        {% if page_obj.has_next %}
-	            <a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
-	        {% endif %}
-	        </span>
-	    </div>
+		<div class="pagination bottom_pag">
+			<span class="step-links">
+			{% if page_obj.has_previous %}
+				<a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
+			{% endif %}
+				<span class="current">
+					Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+				</span>
+			{% if page_obj.has_next %}
+				<a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
+			{% endif %}
+			</span>
+		</div>
 
 	{% else %}
 		<p>There are no requests to view</p>

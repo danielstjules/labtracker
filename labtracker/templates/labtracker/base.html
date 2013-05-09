@@ -11,11 +11,11 @@
 </head>
 <body>
 
-<div id="wrap">
+<div class="wrap">
 
-<div id="header">
-	<div id="logo"></div>
-	<div id="topnav">
+<div class="header">
+	<div class="logo"></div>
+	<div class="topnav">
 		{% if not user.is_authenticated %}
 			<a href="/login/">Log in</a>
 		{% endif %}	
@@ -33,39 +33,51 @@
 	</div>
 </div>
 
-<div id="container">
-	<div id="notifications">
-	{% if user.is_authenticated and not user.is_superuser %}
-		{% if unread_number == 1 %}
-			Hello, <span class = "username">{{ user.username }}</span>. You have <a href="/requests/">{{ unread_number }} updated</a> request.
-		{% elif unread_number > 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have <a href="/requests/">{{ unread_number }} updated</a> requests.
-		{% else %}
-			Hello,  <span class = "username">{{ user.username }}</span>. You have no updated requests.
-		{% endif %}
-	
-	{% elif user.is_authenticated and user.is_superuser %}
+<div class="container">
+	<div class="notifications">
+		{% if user.is_authenticated and not user.is_superuser %}
+			{% if unread_number == 1 %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				You have <a href="/requests/">1 updated</a> request.
+			{% elif unread_number > 1 %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				You have <a href="/requests/">{{ unread_number }} updated</a> requests.
+			{% else %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				You have no updated requests.
+			{% endif %}
+		
+		{% elif user.is_authenticated and user.is_superuser %}
+			{% if open_requests_number == 1 %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				There is <a href="/requests_admin/">1 open</a> request.
+			{% elif open_requests_number > 1 %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				There are <a href="/requests_admin/">{{ open_requests_number }} 
+				open</a> requests.
+			{% else %}
+				Hello, <span class="username">{{ user.username }}</span>. 
+				There are no open requests.
+			{% endif %}
 
-		{% if open_requests_number == 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. There is <a href="/requests_admin/">{{ open_requests_number }} open</a> request.
-		{% elif open_requests_number > 1 %}
-			Hello,  <span class = "username">{{ user.username }}</span>. There are <a href="/requests_admin/">{{ open_requests_number }} open</a> requests.
 		{% else %}
-			Hello,  <span class = "username">{{ user.username }}</span>. There are no open requests.
-		{% endif %}
-
-	{% else %}
-		labtracker is an online tool for keeping track of lab equipment and use
-	{% endif %}	
+			labtracker is an online tool for keeping track of lab equipment and use
+		{% endif %}	
 	</div>
-	<div id="content">
+	<div class="content">
 		{% block h1_title %}{% endblock %}
-		{% if error_message %}<div id="error_message">{{ error_message }}</div>{% endif %}
-		{% if success_message %}<div id="success_message">{{ success_message }}</div>{% endif %}
-		{% if message %}<div id="message">{{ message }}</div>{% endif %}
+		
+		{% if error_message %}
+			<div class="error_message">{{ error_message }}</div>
+		{% endif %}
+		{% if success_message %}
+			<div class="success_message">{{ success_message }}</div>
+		{% endif %}
+		{% if message %}
+			<div class="message">{{ message }}</div>
+		{% endif %}
 
         {% block content %}
-
         {% endblock %}
 	</div>
 </div>

@@ -3,26 +3,28 @@
 
 {% block content %}
 {% if item_list %}
-    <div class="pagination" id="top_pag">
-        <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="/{{ page_obj.previous_page_number }}/">previous</a>
-        {% endif %}
-            <span class="current">
-                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-            </span>
-        {% if page_obj.has_next %}
-            <a href="/{{ page_obj.next_page_number }}/">next</a>
-        {% endif %}
-        </span>
-    </div>
+	<div class="pagination top_pag">
+		<span class="step-links">
+		{% if page_obj.has_previous %}
+			<a href="/{{ page_obj.previous_page_number }}/">previous</a>
+		{% endif %}
+			<span class="current">
+				Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+			</span>
+		{% if page_obj.has_next %}
+			<a href="/{{ page_obj.next_page_number }}/">next</a>
+		{% endif %}
+		</span>
+	</div>
 
 	<table id="equipment_list" summary="Equipment List">
 	<thead>
 		<tr>
-			<th scope="col">Local</th>
-			<th scope="col">Item</th>
+			<th scope="col">#</th>
+			<th scope="class">Class</th>
 			<th scope="col">Location</th>
+			<th scope="col">Item</th>
+			<th scope="col">CFI</th>
 			<th scope="col">Company</th>
 			<th scope="col">Part Num</th>
 		</tr>
@@ -31,8 +33,10 @@
 	{% for item in item_list %}
 		<tr>
 			<td>{{ item.local_num }}</td>
+			<td>{{ item.part_class }}</td>
+			<td>{{ item.location }}</td>
 			<td><a href="/item/{{ item.id }}/">{{ item.description }}</a></td>
-			<td>{{ item.location}}</td>
+			<td>{{ item.cfi }}</td>
 			<td>{{ item.company }}</td>
 			<td>{{ item.part_num }}</td>
 		</tr>
@@ -40,19 +44,19 @@
 	</tbody>
 	</table>
 
-    <div class="pagination" id="bottom_pag">
-        <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="/{{ page_obj.previous_page_number }}/">previous</a>
-        {% endif %}
-            <span class="current">
-                Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-            </span>
-        {% if page_obj.has_next %}
-            <a href="/{{ page_obj.next_page_number }}/">next</a>
-        {% endif %}
-        </span>
-    </div>
+	<div class="pagination bottom_pag">
+		<span class="step-links">
+		{% if page_obj.has_previous %}
+			<a href="/{{ page_obj.previous_page_number }}/">previous</a>
+		{% endif %}
+			<span class="current">
+				Page {{ page_obj.number }} of {{ paginator.num_pages }}.
+			</span>
+		{% if page_obj.has_next %}
+			<a href="/{{ page_obj.next_page_number }}/">next</a>
+		{% endif %}
+		</span>
+	</div>
 
 {% else %}
 	<p>No items are available.</p>
