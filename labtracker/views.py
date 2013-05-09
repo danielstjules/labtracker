@@ -36,7 +36,7 @@ def modify_request_status(request, request_id):
     post = request.POST
     req = Request.objects.get(pk=request_id)
     template = 'forward.html'
-    fwd_page = '/requests_admin/'
+    fwd_page = '/request/' + request_id
     req.status = post.get('choice')
     req.save()
     response = {
