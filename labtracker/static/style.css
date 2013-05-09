@@ -21,15 +21,18 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
 	clear: both;
-	padding-bottom: 10px;
+	margin-bottom: 10px;
+	padding-bottom: 0;
 }
 
 h1 {
-	font-size: 14pt;
+	font-size: 13pt;
 }
 
 h2 {
-	font-size: 12pt;
+	font-size: 11pt;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #d5d5d5;
 }
 
 a, a:link, a:visited, a:active, a:hover {
