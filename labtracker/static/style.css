@@ -164,14 +164,6 @@ tr.inactive:hover td {
     color: #999;
 }
 
-.top_pag {
-    margin-bottom: 20px;
-}
-
-.bottom_pag {
-    margin-top: 20px;
-}
-
 /* list-based info */
 
 ul {
@@ -241,6 +233,8 @@ option.selected {
     padding: 10px 0 0 0;
 }
 
+/* blockquotes for displaying comments */
+
 blockquote {
     padding: 0 0 0 15px;
     margin: 0 0 20px;
@@ -252,5 +246,56 @@ blockquote {
 blockquote small {
     display: block;
     line-height: 20px;
+    color: #999999;
+}
+
+/* pagination */
+
+.pagination {
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.bottom_pag {
+    padding: 20px 0 25px 0;
+    margin: 0
+}
+
+.pagination ul {
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    *display: inline;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a,
+.pagination span {
+    float: left;
+    padding: 2px 8px;
+    line-height: 18px;
+    text-decoration: none;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    margin: 0 4px 0 0;
+}
+
+.pagination a:hover,
+.pagination a:focus,
+.pagination .active a,
+.pagination .active span {
+    background-color: #f5f5f5;
+}
+
+.pagination .active a,
+.pagination .active span {
+    color: #999999;
+    cursor: default;
+}
+
+.pagination span {
     color: #999999;
 }

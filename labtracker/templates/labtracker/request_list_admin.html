@@ -6,17 +6,25 @@
 {% if user.is_authenticated and user.is_superuser %}
 	{% if request_list %}
 		<div class="pagination top_pag">
-			<span class="step-links">
+			<ul>
 			{% if page_obj.has_previous %}
-				<a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
+				<li><a href="/{{ page_obj.previous_page_number }}/">&laquo; previous</a></li>
+			{% else %}
+				<span>&laquo; previous</span>
 			{% endif %}
-				<span class="current">
-					Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-				</span>
+			{% for p in page_obj.paginator.page_range %}
+				{% ifequal p page_obj.number %}
+					<li class="active"><a href="/{{ p }}/">{{ p }}</a></li>
+				{% else %}
+					<li><a href="/{{ p }}/">{{ p }}</a></li>
+				{% endifequal %}
+			{% endfor %}
 			{% if page_obj.has_next %}
-				<a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
+				<li><a href="/{{ page_obj.next_page_number }}/">next &raquo;</a></li>
+			{% else %}
+				<span>next &raquo;</span>
 			{% endif %}
-			</span>
+			</ul>
 		</div>
 
 		<table id="equipment_list" summary="Equipment List">
@@ -49,17 +57,25 @@
 		</table>
 
 		<div class="pagination bottom_pag">
-			<span class="step-links">
+			<ul>
 			{% if page_obj.has_previous %}
-				<a href="/requests_admin/{{ page_obj.previous_page_number }}/">previous</a>
+				<li><a href="/{{ page_obj.previous_page_number }}/">&laquo; previous</a></li>
+			{% else %}
+				<span>&laquo; previous</span>
 			{% endif %}
-				<span class="current">
-					Page {{ page_obj.number }} of {{ paginator.num_pages }}.
-				</span>
+			{% for p in page_obj.paginator.page_range %}
+				{% ifequal p page_obj.number %}
+					<li class="active"><a href="/{{ p }}/">{{ p }}</a></li>
+				{% else %}
+					<li><a href="/{{ p }}/">{{ p }}</a></li>
+				{% endifequal %}
+			{% endfor %}
 			{% if page_obj.has_next %}
-				<a href="/requests_admin/{{ page_obj.next_page_number }}/">next</a>
+				<li><a href="/{{ page_obj.next_page_number }}/">next &raquo;</a></li>
+			{% else %}
+				<span>next &raquo;</span>
 			{% endif %}
-			</span>
+			</ul>
 		</div>
 
 	{% else %}
