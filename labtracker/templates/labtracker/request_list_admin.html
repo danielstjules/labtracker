@@ -6,25 +6,7 @@
 {% if user.is_authenticated and user.is_superuser %}
 	{% if request_list %}
 		<div class="pagination top_pag">
-			<ul>
-			{% if page_obj.has_previous %}
-				<li><a href="/{{ page_obj.previous_page_number }}/">&laquo; previous</a></li>
-			{% else %}
-				<span>&laquo; previous</span>
-			{% endif %}
-			{% for p in page_obj.paginator.page_range %}
-				{% ifequal p page_obj.number %}
-					<li class="active"><a href="/{{ p }}/">{{ p }}</a></li>
-				{% else %}
-					<li><a href="/{{ p }}/">{{ p }}</a></li>
-				{% endifequal %}
-			{% endfor %}
-			{% if page_obj.has_next %}
-				<li><a href="/{{ page_obj.next_page_number }}/">next &raquo;</a></li>
-			{% else %}
-				<span>next &raquo;</span>
-			{% endif %}
-			</ul>
+			{% include 'pagination.html' %}
 		</div>
 
 		<table id="equipment_list" summary="Equipment List">
@@ -57,25 +39,7 @@
 		</table>
 
 		<div class="pagination bottom_pag">
-			<ul>
-			{% if page_obj.has_previous %}
-				<li><a href="/{{ page_obj.previous_page_number }}/">&laquo; previous</a></li>
-			{% else %}
-				<span>&laquo; previous</span>
-			{% endif %}
-			{% for p in page_obj.paginator.page_range %}
-				{% ifequal p page_obj.number %}
-					<li class="active"><a href="/{{ p }}/">{{ p }}</a></li>
-				{% else %}
-					<li><a href="/{{ p }}/">{{ p }}</a></li>
-				{% endifequal %}
-			{% endfor %}
-			{% if page_obj.has_next %}
-				<li><a href="/{{ page_obj.next_page_number }}/">next &raquo;</a></li>
-			{% else %}
-				<span>next &raquo;</span>
-			{% endif %}
-			</ul>
+			{% include 'pagination.html' %}
 		</div>
 
 	{% else %}
