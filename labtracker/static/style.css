@@ -182,17 +182,19 @@ ul {
 /* messages */
 
 .error_message {
-    background: #F07382;
-    border: 1px solid #B83040;
+    background: #f2dede;
+    border: 1px solid #eed3d7;
     padding: 10px;
-    color: #fff;
+    color: #b94a48;
+    text-shadow: 0 1px 0 #fff;
 }
 
 .success_message {
-    background: #73F08C;
-    border: 1px solid #30B849;
+    border: 1px solid #d6e9c6;
     padding: 10px;
-    color: #383838;
+    color: #468847;
+    background: #dff0d8;
+    text-shadow: 0 1px 0 #fff;
 }
 
 /* forms */
@@ -223,6 +225,10 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 option.selected {
     font-weight: bold;
+}
+
+.login_form {
+    margin-top: 20px;
 }
 
 .login_form label {
