@@ -23,12 +23,18 @@ class Item(models.Model):
 
 
 class Download(models.Model):
-    item = models.ForeignKey(Item)
+    DTYPE_DATASHEET = 'D'
+    DTYPE_MANUAL = 'M'
+    DTYPE_SOFTWARE = 'S'
+    DTYPE_OTHER = 'O'
     DTYPE_CHOICES = (
-        ('datasheet', 'Datasheet'),
-        ('manual', 'Manual'),
-        ('software', 'Software'),
+        (DTYPE_DATASHEET, 'Datasheet'),
+        (DTYPE_MANUAL, 'Manual'),
+        (DTYPE_SOFTWARE, 'Software'),
+        (DTYPE_OTHER, 'Other'),
     )
+
+    item = models.ForeignKey(Item)
     dtype = models.CharField(max_length=15, choices=DTYPE_CHOICES)
     name = models.CharField(max_length=250)
     url = models.URLField(blank=True)
@@ -39,18 +45,25 @@ class Download(models.Model):
 
 
 class Request(models.Model):
+    PENDING = 'Pending'
+    APPROVED = 'Approved'
+    ACTIVE = 'Active'
+    COMPLETED = 'Completed'
+    DECLINED = 'Declined'
+    STATUS_CHOICES = (
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (ACTIVE, 'Active'),
+        (COMPLETED, 'Completed'),
+        (DECLINED, 'Declined'),
+    )
+
     item = models.ForeignKey(Item)
     user = models.ForeignKey(User, blank=True, null=True)
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
-        ('active', 'Active'),
-        ('completed', 'Completed'),
-        ('declined', 'Declined'),
-    )
-    status = models.CharField(max_length=15, choices=STATUS_CHOICES)
     read = models.BooleanField(default=True)
     notes = models.TextField(blank=True)
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES,
+                              default=PENDING)
 
     date_submitted = models.DateTimeField()
     date_updated = models.DateTimeField('last modified date')
