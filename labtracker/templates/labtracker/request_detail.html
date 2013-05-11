@@ -8,7 +8,7 @@
 	<h2>Request Details</h2>
 	<p>
 		<strong>User:</strong> {{req.user.username}}<br />
-		<strong>Item:</strong> <a href="/item/{{ req.item.id }}/">{{ req.item.description }}</a><br />
+		<strong>Item:</strong> <a href="{{ req.item.get_absolute_url }}">{{ req.item.description }}</a><br />
 		<strong>Date Submitted:</strong> {{req.date_submitted}}<br />
 		<strong>Last Updated:</strong> {{req.date_updated}}<br />
 		{% if req.date_approved %}
@@ -42,7 +42,7 @@
 
 	{% if user.is_superuser %}
 		<h2>Change Status</h2>	
-		<form action="/request/{{ req.id }}/request_modify/" method="post">
+		<form action="{{ req.get_modify_url }}" method="post">
 			{% csrf_token %}
 			<select name="choice" id="choice_id" onchange="javascript: submit(this);">
 				{% for key,val in req.STATUS_CHOICES %}
@@ -67,7 +67,7 @@
 		{% endfor %}
 	{% endif %}
 
-	<form action="/request/{{ req.id }}/request/comment_submit/" method="post">
+	<form action="{{ req.get_post_comment_url }}" method="post">
 		{% csrf_token %}
 		<label for="comment">Post a comment</label><br />
 		<textarea name="comment" id="comment" cols="100" rows="5"></textarea>

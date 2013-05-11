@@ -25,7 +25,7 @@
 			<td>{{ item.local_num }}</td>
 			<td>{{ item.part_class }}</td>
 			<td>{{ item.location }}</td>
-			<td><a href="/item/{{ item.id }}/">{{ item.description }}</a></td>
+			<td><a href="{{ item.get_absolute_url }}">{{ item.description }}</a></td>
 			<td>{{ item.cfi }}</td>
 			<td>{{ item.company }}</td>
 			<td>{{ item.part_num }}</td>

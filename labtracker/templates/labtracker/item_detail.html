@@ -38,7 +38,7 @@
 
 	{% if user.is_superuser and user.is_authenticated %}
 		<p>
-			<a href="/admin/labtracker/item/{{ item.pk }}/">Modify Item Details</a>
+			<a href="{{ item.get_admin_url }}">Modify Item Details</a>
 		</p>
 	{% endif %}
 	
@@ -52,7 +52,7 @@
 
 	<h2>Request Use</h2>
 	{% if user.is_authenticated %}
-		<form action="/item/{{ item.id }}/request/" method="post">
+		<form action="{{ item.get_request_url }}" method="post">
 			{% csrf_token %}
 			<label for="notes">Request Notes</label><br />
 			<textarea name="notes" id="notes" cols="100" rows="5"></textarea>
@@ -79,7 +79,7 @@
 	<h2>All Requests</h2>
 	<ul>
 		{% for request in item.request_set.all %}
-			<li><a href="/request/{{ request.id }}/">{{ request }}</a></li>
+			<li><a href="{{ request.get_absolute_url }}">{{ request }}</a></li>
 		{% endfor %}
 	</ul>
 

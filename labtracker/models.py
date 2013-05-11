@@ -19,7 +19,16 @@ class Item(models.Model):
     views = models.PositiveSmallIntegerField(default=0)
 
     def __unicode__(self):
-        return self.description
+        return u"%s" % self.description
+
+    def get_absolute_url(self):
+        return "/item/%i/" % self.pk
+
+    def get_request_url(self):
+        return "/item/%i/request/" % self.pk
+
+    def get_admin_url(self):
+        return "/admin/labtracker/item/%i/" % self.pk
 
 
 class Download(models.Model):
@@ -41,7 +50,7 @@ class Download(models.Model):
     notes = models.TextField(blank=True)
 
     def __unicode__(self):
-        return self.name
+        return u"%s" % self.name
 
 
 class Request(models.Model):
@@ -73,7 +82,16 @@ class Request(models.Model):
     date_declined = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
-        return "[" + self.status + "] " + str(self.item)
+        return u"[%s] %s" % (self.status, str(self.item))
+
+    def get_absolute_url(self):
+        return "/request/%i/" % self.pk
+
+    def get_modify_url(self):
+        return "/request/%i/modify/" % self.pk
+
+    def get_post_comment_url(self):
+        return "/request/%i/post_comment/" % self.pk
 
     def save(self, *args, **kwargs):
         current_datetime = datetime.utcnow().replace(tzinfo=utc)

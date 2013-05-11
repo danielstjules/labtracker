@@ -19,13 +19,12 @@ def submit_request(request, item_id):
     post = request.POST
     item = Item.objects.get(pk=item_id)
     template = 'forward.html'
-    fwd_page = '/item/' + item_id
-    Request.objects.create(item=item, status="pending", notes=post["notes"],
+    Request.objects.create(item=item, status=Request.PENDING, notes=post["notes"],
                            user=request.user)
     response = {
         'success_message': "You have successfully submitted a request for: " + item.description,
         'title': 'Successful',
-        'fwd_page': fwd_page
+        'fwd_page': item.get_absolute_url
     }
     return render_to_response(template, response,
                               context_instance=RequestContext(request))
@@ -36,13 +35,12 @@ def modify_request_status(request, request_id):
     post = request.POST
     req = Request.objects.get(pk=request_id)
     template = 'forward.html'
-    fwd_page = '/request/' + request_id
     req.status = post.get('choice')
     req.save()
     response = {
         'success_message': "Request Status changed successfully to: " + post.get('choice'),
         'title': 'Successful',
-        'fwd_page': fwd_page
+        'fwd_page': req.get_absolute_url
     }
     return render_to_response(template, response,
                               context_instance=RequestContext(request))
@@ -54,13 +52,12 @@ def post_comment(request, request_id):
     req = Request.objects.get(pk=request_id)
     Comment.objects.create(user=request.user, request=req, content=post["comment"])
     template = 'forward.html'
-    fwd_page = '/request/'+request_id+'/'
     if request.user != req.user:
         req.mark_unread()
     response = {
         'success_message': "Your comment has been successfully posted",
         'title': 'Successful',
-        'fwd_page': fwd_page
+        'fwd_page': req.get_absolute_url
     }
     return render_to_response(template, response,
                               context_instance=RequestContext(request))
@@ -93,7 +90,6 @@ def login_user(request):
     msg_type = 'message'
     msg_text = "Please log in using the form below."
     template = 'auth.html'
-    fwd_page = '/'
 
     if request.POST:
         username = request.POST.get('username')
@@ -116,7 +112,7 @@ def login_user(request):
     response = {
         msg_type: msg_text,
         'title': 'log in',
-        'fwd_page': fwd_page
+        'fwd_page': '/'
     }
 
     return render_to_response(template, response,
@@ -127,11 +123,10 @@ def logout_user(request):
     """Log the user out and redirect them to the app root"""
     logout(request)
     template = 'forward.html'
-    fwd_page = '/'
     response = {
         'success_message': "You've been successfully logged out!",
         'title': 'log out',
-        'fwd_page': fwd_page
+        'fwd_page': '/'
     }
     return render_to_response(template, response,
                               context_instance=RequestContext(request))
