@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.timezone import utc
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -130,13 +130,13 @@ class Request(models.Model):
         self.read = False
         super(Request, self).save()
 
-    def is_inactive(self):
-        if self.status == 'completed' or self.status == 'declined':
-            return True
-        return False
+    def is_open(self):
+        if self.status == Request.COMPLETED or self.status == Request.DECLINED:
+            return False
+        return True
 
     def was_submitted_recently(self):
-        return self.date_submitted >= timezone.now() - datetime.timedelta(days=1)
+        return self.date_submitted >= timezone.now() - timedelta(days=7)
     was_submitted_recently.admin_order_field = 'submitted'
     was_submitted_recently.boolean = True
     was_submitted_recently.short_description = 'Submitted Recently?'

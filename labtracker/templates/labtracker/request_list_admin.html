@@ -22,10 +22,10 @@
 		</thead>
 		<tbody>
 		{% for req in request_list %}
-			{% if req.is_inactive %}
-				<tr class="inactive">
-			{% else %}
+			{% if req.is_open %}
 				<tr>
+			{% else %}
+				<tr class="inactive">
 			{% endif %}
 					<td>{{ req.user.username }}</td>
 					<td>{{ req.item.description }}</td>
