@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
-from labtracker.models import Request, Item, Comment
 from django.contrib.auth import authenticate, login, logout
+from labtracker.models import Request, Item, Comment
 
 
 def item_detail(request, item_id):
@@ -16,6 +16,12 @@ def item_detail(request, item_id):
 
 def submit_request(request, item_id):
     """Submit a request for an item"""
+    # Display login page and error if the user isn't logged in
+    if not request.user.is_authenticated():
+        error_response = {'error_message': 'You must login to submit a request.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
     post = request.POST
     item = Item.objects.get(pk=item_id)
     template = 'forward.html'
@@ -32,6 +38,12 @@ def submit_request(request, item_id):
 
 def modify_request_status(request, request_id):
     """Change the status of an existing request"""
+    # Display login page and error if not logged in as staff
+    if not request.user.is_authenticated() or not request.user.is_staff:
+        error_response = {'error_message': 'Only Admins can modify a request status.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
     post = request.POST
     req = Request.objects.get(pk=request_id)
     template = 'forward.html'
@@ -48,6 +60,12 @@ def modify_request_status(request, request_id):
 
 def post_comment(request, request_id):
     """Post a user comment on request_details page"""
+    # Display login page and error if the user isn't logged in
+    if not request.user.is_authenticated():
+        error_response = {'error_message': 'You must login to comment on a request.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
     post = request.POST
     req = Request.objects.get(pk=request_id)
     Comment.objects.create(user=request.user, request=req, content=post["comment"])
@@ -65,6 +83,12 @@ def post_comment(request, request_id):
 
 def request_list(request):
     """View a list of requests for the current user"""
+    # Display login page and error if the user isn't logged in
+    if not request.user.is_authenticated():
+        error_response = {'error_message': 'You must login to view this page.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
     request_list = Request.objects.filter(user=request.user.id)
     return render_to_response('request_list.html', {'request_list': request_list},
                               context_instance=RequestContext(request))

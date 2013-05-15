@@ -40,7 +40,7 @@
 		</p>
 	{% endif %}
 
-	{% if user.is_superuser %}
+	{% if user.is_staff %}
 		<h2>Change Status</h2>	
 		<form action="{{ req.get_modify_url }}" method="post">
 			{% csrf_token %}
