@@ -1,7 +1,7 @@
 labtracker
 ===========
 
-labtracker is a Django app developed at the request of [Dr. Ramon Maldonado-Basilio](<http://ptlab.site.uottawa.ca/dr-ramon-maldonado-basilio/>), a Post-Doctorial Researcher at the University of Ottawa. It has been designed to keep track of equipment information and use in a university lab setting. It was written by Vladimir Suse and myself during our free time.
+labtracker is a Django app developed at the request of [Dr. Ramon Maldonado-Basilio](<http://ptlab.site.uottawa.ca/dr-ramon-maldonado-basilio/>), a Post-Doctorial Researcher at the University of Ottawa. It has been designed to keep track of equipment information and use in a university lab setting. It was written by Vladimir Suse and myself in our free time.
 
 ![screenshot](http://danielstjules.com/labtracker/screenshot.gif)
 
@@ -22,6 +22,10 @@ Firstly, [django-dynamic-fixture](https://github.com/paulocheque/django-dynamic-
 
 	pip install django-dynamic-fixture
 
+And [selenium](http://selenium-python.readthedocs.org/en/latest/) is used for functional tests. We use the FireFox WebDriver. Selenium can be installed using:
+
+	pip install selenium
+
 Then, to run the tests included in labtracker, simply navigate to the project folder and run:
 
 	python manage.py test labtracker
@@ -29,7 +33,7 @@ Then, to run the tests included in labtracker, simply navigate to the project fo
 Authors
 -------
 
-Application created by Daniel St. Jules and Vladimir Suse.
+Application created by Daniel St. Jules, along with contributions from Vladimir Suse.
 
 Licensing
 ---------
