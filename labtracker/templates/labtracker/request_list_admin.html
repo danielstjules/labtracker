@@ -1,12 +1,12 @@
 {% extends 'base.html' %} 
 {% block title %}labtracker | My Requests{% endblock %}
-{% block h1_title %}<h1>Pending Requests</h1>{% endblock %}
+{% block h1_title %}<h1>Requests</h1>{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated and user.is_superuser %}
 	{% if request_list %}
 		<div class="pagination top_pag">
-			{% include 'pagination.html' %}
+			{% include 'pagination.html' with page_root="/requests_admin" %}
 		</div>
 
 		<table id="equipment_list" summary="Equipment List">
@@ -39,7 +39,7 @@
 		</table>
 
 		<div class="pagination bottom_pag">
-			{% include 'pagination.html' %}
+			{% include 'pagination.html' with page_root="/requests_admin" %}
 		</div>
 
 	{% else %}

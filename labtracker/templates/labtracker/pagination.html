@@ -1,18 +1,22 @@
 <ul>
 	{% if page_obj.has_previous %}
-		<li><a href="/{{ page_obj.previous_page_number }}/">&laquo; previous</a></li>
+		<li><a href="{{ page_root }}/{{ page_obj.previous_page_number }}/">
+			&laquo; previous
+		</a></li>
 	{% else %}
 		<span>&laquo; previous</span>
 	{% endif %}
 	{% for p in page_obj.paginator.page_range %}
 		{% ifequal p page_obj.number %}
-			<li class="active"><a href="/{{ p }}/">{{ p }}</a></li>
+			<li class="active"><a href="{{ page_root }}/{{ p }}/">{{ p }}</a></li>
 		{% else %}
-			<li><a href="/{{ p }}/">{{ p }}</a></li>
+			<li><a href="{{ page_root }}/{{ p }}/">{{ p }}</a></li>
 		{% endifequal %}
 	{% endfor %}
 	{% if page_obj.has_next %}
-		<li><a href="/{{ page_obj.next_page_number }}/">next &raquo;</a></li>
+		<li><a href="{{ page_root }}/{{ page_obj.next_page_number }}/">
+			next &raquo;
+		</a></li>
 	{% else %}
 		<span>next &raquo;</span>
 	{% endif %}
