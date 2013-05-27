@@ -135,12 +135,6 @@ class Request(models.Model):
             return False
         return True
 
-    def was_submitted_recently(self):
-        return self.date_submitted >= timezone.now() - timedelta(days=7)
-    was_submitted_recently.admin_order_field = 'submitted'
-    was_submitted_recently.boolean = True
-    was_submitted_recently.short_description = 'Submitted Recently?'
-
 
 class Comment(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)

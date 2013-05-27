@@ -64,11 +64,3 @@ class RequestTest(unittest.TestCase):
         for open_status in open_statuses:
             open_request = N(Request, item=self.item, status=open_status)
             self.assertEqual(open_request.is_open(), True)
-
-    def test_was_submitted_recently_with_six_days_old(self):
-        """Should return true if submitted within past 7 days"""
-        self.assertEqual(self.request_completed.was_submitted_recently(), True)
-
-    def test_was_submitted_recently_with_eight_days_old(self):
-        """Should return false if request was submitted more than a week ago"""
-        self.assertEqual(self.request_declined.was_submitted_recently(), False)
