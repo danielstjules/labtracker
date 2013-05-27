@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from time import gmtime, strftime
 
 
 class Item(models.Model):
@@ -45,10 +46,14 @@ class Download(models.Model):
     dtype = models.CharField(max_length=15, choices=DTYPE_CHOICES)
     name = models.CharField(max_length=250)
     url = models.URLField(blank=True)
+    dfile = models.FileField(upload_to="download/%Y/%m")
     notes = models.TextField(blank=True)
 
     def __unicode__(self):
         return u"%s" % self.name
+
+    def get_filename(self):
+        return self.dfile.__unicode__().rsplit('/', 1)[-1]
 
 
 class Request(models.Model):

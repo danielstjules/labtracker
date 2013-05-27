@@ -66,13 +66,18 @@
 	<h2>Downloads</h2>
 	{% for download in item.download_set.all %}
 		<div class="download">
-			<p>
-				<strong>
-					[{{ download.get_dtype_display }}] 
-					<a href="{{ download.url }}">{{ download.name }}</a>
-				</strong>
-			</p>
-			<p><strong>Notes: </strong>{{ download.notes }}</p>
+			<strong>
+				[{{ download.get_dtype_display }}] {{ download.name }}
+			</strong><br />
+			{% if download.url %}
+				<strong>Url: </strong>
+				<a href="{{ download.url }}">{{ download.url }}</a><br />
+			{% endif %}
+			{% if download.dfile %}
+				<strong>File: </strong>
+				<a href="/media/{{ download.dfile }}">{{ download.get_filename }}</a><br />
+			{% endif %}
+			<strong>Notes: </strong>{{ download.notes }}
 		</div>
 	{% endfor %}
 
