@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils.timezone import utc
-from datetime import datetime, timedelta
 from django.utils import timezone
 from django.contrib.auth.models import User
 
@@ -94,7 +92,7 @@ class Request(models.Model):
         return "/request/%i/post_comment/" % self.pk
 
     def save(self, *args, **kwargs):
-        current_datetime = datetime.utcnow().replace(tzinfo=utc)
+        current_datetime = timezone.now()
         self.date_updated = current_datetime
 
         if self.pk is not None:
