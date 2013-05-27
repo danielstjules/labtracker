@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'Labtracker Administration' %}{% endblock %}
+
+{% block extrahead %}
+	<style type="text/css">
+		.admin-links a {
+			margin: 0 10px 10px;
+			display: block;
+			float: left
+		}
+	</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Labtracker Administration' %}</h1>
+{% endblock %}
+
+{% block nav-global %}
+	{% if user.is_staff %}
+		<div class="admin-links">
+			<a href="/">Labtracker Home</a>  
+			<a href="/admin/">Admin Home</a>
+			<a href="/admin/labtracker/item/">View Items</a>
+			<a href="/admin/labtracker/item/add/">Add Item</a>
+			<a href="/admin/labtracker/request/">View Requests</a>
+			<a href="/admin/auth/user/">All Users</a>
+			<a href="/admin/auth/user/add/">Add User</a>
+		</div>
+	{% endif %}
+{% endblock %}
