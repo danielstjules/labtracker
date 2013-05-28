@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from labtracker.models import Request, Item, Comment, Report
-from datetime import timedelta
+from datetime import timedelta, date
 from django.utils import timezone
 
 
@@ -117,14 +117,77 @@ def reports(request):
         return render_to_response('auth.html', error_response,
                                   context_instance=RequestContext(request))
 
-    # start_date = timezone.now() - timedelta(days=6)
-    # end_date = timezone.now()
-    # new_report = Report.objects.create(user=request.user, description="test")
-    # new_report.createExcelFile(start_date, end_date)
-    # new_report.save()
+    # On POST, generate the report
+    if request.POST:
+        post = request.POST
 
-    report_list = Report.objects.all().order_by('id').reverse()
-    return render_to_response('reports.html', {'report_list': report_list},
+        # Define some default values
+        today = date.today()
+        start_date = None
+        end_date = timezone.now()
+
+        title = post.get('title') if post.get('title') else None
+        company = post.get('company') if post.get('company') else None
+        item_id = post.get('item') if post.get('item') else None
+
+        # Check if start and end dates are set
+        if post.get('startdate') and post.get('enddate'):
+            start_date = post.get('startdate')
+            end_date = post.get('enddate')
+        elif post.get('startdate') and not post.get('enddate'):
+            start_date = post.get('startdate')
+        elif not post.get('startdate') and post.get('enddate'):
+            end_date = post.get('enddate')
+
+        # Check if a preset range was chosen
+        elif post.get('timelength') == 'past7days':
+            start_date = today - timedelta(days=7)
+        elif post.get('timelength') == 'past30days':
+            start_date = today - timedelta(days=30)
+        elif post.get('timelength') == 'past60days':
+            start_date = today - timedelta(days=60)
+        elif post.get('timelength') == 'past90days':
+            start_date = today - timedelta(days=90)
+        elif post.get('timelength') == 'past365days':
+            start_date = today - timedelta(days=365)
+        elif post.get('timelength') == 'thisweek':
+            start_date = today - timedelta(days=today.weekday())
+        elif post.get('timelength') == 'thismonth':
+            start_date = date(today.year, today.month, 1)
+        elif post.get('timelength') == 'thisyear':
+            start_date = date(today.year, 1, 1)
+
+        # Generate the report
+        new_report = Report.objects.create(user=request.user,
+                                           description=post.get('description'))
+        new_report.createExcelFile(start_date, end_date, company, item_id, title)
+        new_report.save()
+
+        template = 'forward.html'
+        response = {
+            'success_message': "Report successfully generated",
+            'title': 'Successful',
+            'fwd_page': '/reports/'
+        }
+
+        # Render error and delete report if the file wasn't created
+        if not new_report.rfile:
+            new_report.delete()
+            response = {
+                'error_message': "No requests matched your criteria for the Report",
+                'title': 'Error: Could not generate report',
+                'fwd_page': '/reports/'
+            }
+
+        return render_to_response(template, response,
+                                  context_instance=RequestContext(request))
+
+    response = {
+        'report_list': Report.objects.all().order_by('id').reverse(),
+        'company_list': Item.objects.values_list('company', flat=True).distinct(),
+        'item_list': Item.objects.all()
+    }
+    return render_to_response('reports.html', response,
                               context_instance=RequestContext(request))
 
 

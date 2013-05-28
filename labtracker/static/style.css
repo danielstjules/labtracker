@@ -10,6 +10,10 @@
     float: left;
 }
 
+.fr {
+    float: right;
+}
+
 body {
     background: #474747 url('bg.jpg') top left repeat; 
     color: #5f5e5e; 
@@ -241,6 +245,10 @@ option.selected {
 
 .reports_form .left_col {
     margin-right: 20px;
+}
+
+.reports_form select {
+    width: 170px;
 }
 
 /* blockquotes for displaying comments */

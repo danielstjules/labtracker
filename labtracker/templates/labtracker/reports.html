@@ -10,31 +10,66 @@
 		{% csrf_token %}
 		<p>
 			Specify the range of dates used in building the Excel sheet. All 
-			requests within that range will be used in creating the file. <br />
-			Feel free to use the shortcuts we've provided, or specify the two dates
-			individually.
+			requests submitted within that range will be used in creating the file.
+			That is, the requests' submission dates are looked at for determining 
+			whether or not they're included. Feel free to use the shortcuts 
+			we've provided, or specify the two dates individually. Furthermore, 
+			by specifying a company or item, results will be filtered on those 
+			criteria.
 		</p>
+
 		<div class="fl left_col">
 			<strong>Specify two dates:</strong><br />
 			<label for="startdate">Start date:</label>
 			<input type="date" name="startdate"><br />
 			<label for="enddate">End date:</label>
-			<input type="date" name="enddate"><br /><br />
-			<strong>And submit to generate:</strong><br />
-			<input type="submit" value="Generate Report" />
+			<input type="date" name="enddate"><br />
 		</div>
+
 		<strong>Or select from a common range:</strong><br />
 		<select name="timelength" id="timelength">
+			<option value="alltime">All Time</option>
 			<option value="past7days">Past 7 Days</option>
 			<option value="past30days">Past 30 Days</option>
 			<option value="past60days">Past 60 Days</option>
 			<option value="past90days">Past 90 Days</option>
 			<option value="past365days">Past 365 Days</option>
-			<option value="thismonth">This Week</option>
+			<option value="thisweek">This Week</option>
 			<option value="thismonth">This Month</option>
 			<option value="thisyear">This Year</option>
-			<option value="alltime">All Time</option>
 		</select><br /><br />
+		<div class="clear"></div>
+
+		<strong>Apply other constraints if needed:</strong><br />
+		<label for="company">Company:</label>
+		<select name="company" id="company">
+			<option class="selected" value="" selected="selected">Company Name</option>
+			{% for company in company_list %}
+				<option value="{{ company }}">{{ company }}</option>
+			{% endfor %}
+		</select><br />
+
+		<label for="company">Item:</label>
+		<select name="item" id="item">
+			<option class="selected" value="" selected="selected">Item Name</option>
+			{% for item in item_list %}
+				<option value="{{item.pk}}">
+					{{ item.local_num }} - {{ item.description }}
+				</option>
+			{% endfor %}
+		</select><br />
+
+		<strong>
+			Enter a title for the report, to be displayed in the Excel sheet:
+		</strong><br />
+		<input name="title" id="title" type="text"><br />
+
+		<strong>
+			Enter a brief description of the report, only to be shown on this page:
+		</strong><br />
+		<textarea name="description" id="description" cols="100" rows="5"></textarea><br />
+		<strong>And submit to generate:</strong><br />
+		<input type="submit" value="Generate Report" />
 	</form>
 	<h2>All Reports</h2>
 	{% if report_list %}

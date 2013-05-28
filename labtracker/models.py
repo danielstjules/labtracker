@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-import random
+from labtracker.excel_reports import ExcelReport
 from django.core.files import File
+
+import random
 import os
-from xlwt import *
 
 
 class Item(models.Model):
@@ -164,12 +165,22 @@ class Report(models.Model):
     def get_delete_url(self):
         return "/report/%i/delete/" % self.pk
 
-    def createExcelFile(self, start_date, end_date, company=None, item_pk=None):
+    def createExcelFile(self, start_date=None, end_date=None, company=None,
+                        item_pk=None, title=None):
         """Creates and saves an excel workbook containing information on item
         requests within a specified range of dates. Can also limit the results
         to requests for a specific item, or items from a specific company."""
-        requests = Request.objects.exclude(date_active__gt=start_date)
-        requests = requests.exclude(date_active__lt=end_date)
+        requests = Request.objects.all()
+
+        # Default to 'Report' if no title is provided
+        title = 'Report' if title is None else title
+
+        # Apply date range limits
+        if start_date is not None:
+            requests = Request.objects.exclude(date_submitted__lt=start_date)
+        if end_date is not None:
+            requests = requests.exclude(date_submitted__gt=end_date)
+
         # Filter by the item's company name if set
         if company is not None:
             requests = requests.filter(item__company=company)
@@ -177,23 +188,68 @@ class Report(models.Model):
         if item_pk is not None:
             requests = requests.filter(item__pk=item_pk)
 
+        # Order by item pk then submission date
+        requests = requests.order_by('item__pk', 'date_submitted')
+
         # If there's no requests in the query set, return
         if len(requests) < 1:
             return
 
         # Otherwise create the workbook from those results
-        w = Workbook()
-        ws = w.add_sheet('Report')
+        report = ExcelReport(8)
+        report.write_header(title)
 
-        i = 0
-        for request in requests:
-            ws.write(i, 0, request.__unicode__())
-            i += 1
+        item = None
+        for req in requests:
+            # Because items are grouped by item, just compare the current & last
+            # items. If they're different, add a new section head
+            if item != req.item:
+                item = req.item
+                # Build section head from item's fields
+                section_name = item.local_num + " - " + item.description
+                if item.part_class:
+                    section_name += " - " + item.part_class
+                if item.company:
+                    section_name += " - " + item.company
+                if item.part_num:
+                    section_name += " - " + item.part_num
+                if item.serial_num:
+                    section_name += " - " + item.serial_num
+                if item.asset_num:
+                    section_name += " - " + item.asset_num
+
+                # Define a list of column names for the sub heading
+                columns = ['User', 'Status', 'Applied', 'Approved', 'Declined',
+                           'Use Start', 'Use End', 'Hours Used']
+
+                report.write_section_head(section_name, columns)
+
+            # Duration is the number of hours from date_active to date_completed
+            # Represents how long the item was used
+            duration = ""
+            if req.date_completed and req.date_active:
+                duration = req.date_completed - req.date_active
+                duration = duration.hours
+
+            # Add the request as an entry
+            report.write_entry([
+                req.user.__unicode__(),
+                req.status,
+                req.date_submitted,
+                req.date_approved,
+                req.date_declined,
+                req.date_active,
+                req.date_completed,
+                duration
+            ])
 
         # Save workbook to tmp file
+        tmp_dir = 'tmp/'
+        if not os.path.exists(tmp_dir):
+            os.makedirs(tmp_dir)
         file_name = hex(random.getrandbits(128))[2:-1] + ".xls"
         tmp_path = os.path.join('tmp/', file_name)
-        w.save(tmp_path)
+        report.save(tmp_path)
 
         # Save file to FileField, delete tmp file
         f = open(tmp_path, 'r')
