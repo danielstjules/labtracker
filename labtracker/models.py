@@ -1,7 +1,10 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
-from time import gmtime, strftime
+import random
+from django.core.files import File
+import os
+from xlwt import *
 
 
 class Item(models.Model):
@@ -147,3 +150,54 @@ class Comment(models.Model):
 
     def __unicode__(self):
         return self.id
+
+
+class Report(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True)
+    description = models.TextField(blank=True)
+    date_created = models.DateTimeField('creation date', auto_now_add=True)
+    rfile = models.FileField(upload_to="report/%Y/%m", blank=True)
+
+    def __unicode__(self):
+        return u"%s" % self.url
+
+    def get_delete_url(self):
+        return "/report/%i/delete/" % self.pk
+
+    def createExcelFile(self, start_date, end_date, company=None, item_pk=None):
+        """Creates and saves an excel workbook containing information on item
+        requests within a specified range of dates. Can also limit the results
+        to requests for a specific item, or items from a specific company."""
+        requests = Request.objects.exclude(date_active__gt=start_date)
+        requests = requests.exclude(date_active__lt=end_date)
+        # Filter by the item's company name if set
+        if company is not None:
+            requests = requests.filter(item__company=company)
+        # Filter by the item's primary key if given
+        if item_pk is not None:
+            requests = requests.filter(item__pk=item_pk)
+
+        # If there's no requests in the query set, return
+        if len(requests) < 1:
+            return
+
+        # Otherwise create the workbook from those results
+        w = Workbook()
+        ws = w.add_sheet('Report')
+
+        i = 0
+        for request in requests:
+            ws.write(i, 0, request.__unicode__())
+            i += 1
+
+        # Save workbook to tmp file
+        file_name = hex(random.getrandbits(128))[2:-1] + ".xls"
+        tmp_path = os.path.join('tmp/', file_name)
+        w.save(tmp_path)
+
+        # Save file to FileField, delete tmp file
+        f = open(tmp_path, 'r')
+        new_file = File(f)
+        self.rfile.save(file_name, new_file)
+        f.close()
+        os.remove(tmp_path)

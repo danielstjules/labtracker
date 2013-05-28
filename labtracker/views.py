@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
-from labtracker.models import Request, Item, Comment
+from labtracker.models import Request, Item, Comment, Report
+from datetime import timedelta
+from django.utils import timezone
 
 
 def item_detail(request, item_id):
@@ -104,6 +106,46 @@ def request_detail(request, request_id):
         req.mark_read()
     response = {'req': req, 'req_list': req_list, 'comment_list': comment_list}
     return render_to_response('request_detail.html', response,
+                              context_instance=RequestContext(request))
+
+
+def reports(request):
+    """Generate excel reports regarding requests and item use"""
+    # Display login page and error if not logged in as staff
+    if not request.user.is_authenticated() or not request.user.is_staff:
+        error_response = {'error_message': 'Only admins can view this page.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
+    # start_date = timezone.now() - timedelta(days=6)
+    # end_date = timezone.now()
+    # new_report = Report.objects.create(user=request.user, description="test")
+    # new_report.createExcelFile(start_date, end_date)
+    # new_report.save()
+
+    report_list = Report.objects.all().order_by('id').reverse()
+    return render_to_response('reports.html', {'report_list': report_list},
+                              context_instance=RequestContext(request))
+
+
+def delete_report(request, report_id):
+    """Delete an Excel report"""
+    # Display login page and error if not logged in as staff
+    if not request.user.is_authenticated() or not request.user.is_staff:
+        error_response = {'error_message': 'Only Admins can delete reports.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
+    report = Report.objects.get(pk=report_id)
+    report.delete()
+
+    template = 'forward.html'
+    response = {
+        'success_message': "Report successfully deleted",
+        'title': 'Successful',
+        'fwd_page': '/reports/'
+    }
+    return render_to_response(template, response,
                               context_instance=RequestContext(request))
 
 

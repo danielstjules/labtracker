@@ -15,6 +15,8 @@ urlpatterns = patterns(
     url(r'^request/(?P<request_id>\d+)/modify/$', 'modify_request_status'),
     url(r'^request/(?P<request_id>\d+)/post_comment/$', 'post_comment'),
     url(r'^login/$', 'login_user'),
+    url(r'^reports/$', 'reports'),
+    url(r'^report/(?P<report_id>\d+)/delete/$', 'delete_report'),
     url(r'^requests/$', 'request_list'),
     url(r'^requests_admin/((?P<page>\d+)/)?$',
         ListView.as_view(

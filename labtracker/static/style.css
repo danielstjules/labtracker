@@ -17,7 +17,7 @@ body {
     font-size: 14px;
     line-height: 20px;
     padding-bottom: 40px;
-    min-width: 620px;
+    min-width: 700px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -85,7 +85,7 @@ p {
 }
 
 .topnav {
-    width: 350px;
+    width: 420px;
     height: 41px;
     padding-top: 26px;
     display: block;
@@ -231,12 +231,16 @@ option.selected {
     margin-top: 20px;
 }
 
-.login_form label {
+.login_form label, .reports_form label {
     display: block;
     width: 80px;
     float: left;
     clear: both;
     padding: 10px 0 0 0;
+}
+
+.reports_form .left_col {
+    margin-right: 20px;
 }
 
 /* blockquotes for displaying comments */
