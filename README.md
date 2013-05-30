@@ -68,6 +68,8 @@ Given existing data, one can import a csv to populate the MySQL db. As an exampl
 Generating Reports
 ------------------
 
+![reports-screenshot](http://danielstjules.com/labtracker/reports.gif)
+
 Labtracker requires [xlwt](https://pypi.python.org/pypi/xlwt) for generating Excel reports:
 
 	$ pip install xlwt
