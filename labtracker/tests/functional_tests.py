@@ -19,12 +19,12 @@ class UrlTests(TestCase):
             self.request = G(Request, item=self.item)
 
         # Couldn't login with users created with django_dynamic_fixture's G()
-        self.user_name = "TestUser"
-        self.user_pass = "test"
+        self.user_name = 'TestUser'
+        self.user_pass = 'test'
         User.objects.create_user(self.user_name, '', self.user_pass).save()
 
-        self.admin_name = "AdministrativeUser"
-        self.admin_pass = "test"
+        self.admin_name = 'AdministrativeUser'
+        self.admin_pass = 'test'
         User.objects.create_superuser(self.admin_name, '', self.admin_pass).save()
 
     def tearDown(self):
@@ -46,7 +46,7 @@ class UrlTests(TestCase):
     def test_submit_request_url(self):
         self.client.login(username=self.user_name, password=self.user_pass)
         response = self.client.post('/item/%i/request/' % self.item.pk,
-                                    {'notes': "test"})
+                                    {'notes': 'test'})
         self.assertEqual(response.status_code, 200)
 
     def test_request_list_url(self):
@@ -90,18 +90,6 @@ class SeleniumTests(LiveServerTestCase):
 
     @classmethod
     def setUpClass(self):
-        # We don't want to delete users and break foreign keys, so simply create
-        # a SuperUser and Regular account if they don't exist
-        self.user_name = "SeleniumTestUser"
-        self.user_pass = "test"
-        if User.objects.filter(username=self.user_name).count() == 0:
-            User.objects.create_user(self.user_name, '', self.user_pass).save()
-
-        self.admin_name = "SeleniumAdministrativeUser"
-        self.admin_pass = "test"
-        if User.objects.filter(username=self.admin_name).count() == 0:
-            User.objects.create_superuser(self.admin_name, '', self.admin_pass).save()
-
         self.selenium = WebDriver()
         self.selenium.implicitly_wait(3)
         super(SeleniumTests, self).setUpClass()
@@ -111,24 +99,52 @@ class SeleniumTests(LiveServerTestCase):
         self.selenium.quit()
         super(SeleniumTests, self).tearDownClass()
 
-    def exists_by_link_text(self, link_text):
+    def setUp(self):
+        # Create a test user and admin account
+        self.user_name = 'SeleniumTestUser'
+        self.user_pass = 'test'
+        if User.objects.filter(username=self.user_name).count() == 0:
+            User.objects.create_user(self.user_name, '', self.user_pass).save()
+
+        self.admin_name = 'SeleniumAdministrativeUser'
+        self.admin_pass = 'test'
+        if User.objects.filter(username=self.admin_name).count() == 0:
+            User.objects.create_superuser(self.admin_name, '', self.admin_pass).save()
+
+    def link_text_exists(self, link_text):
         try:
-            self.selenium.find_element_by_link_text('Logout')
+            self.selenium.find_element_by_link_text(link_text)
         except NoSuchElementException:
             return False
         return True
+
+    def element_with_selector_exists(self, selector):
+        try:
+            self.selenium.find_element_by_css_selector(selector)
+        except NoSuchElementException:
+            return False
+        return True
+
+    def login(self, username, password):
+        # Go to the login page and try logging in with the provided credentials
+        self.selenium.get('%s' % self.live_server_url)
+        self.selenium.find_element_by_link_text('Log in').click()
+        username_input = self.selenium.find_element_by_name('username')
+        username_input.send_keys(username)
+        password_input = self.selenium.find_element_by_name('password')
+        password_input.send_keys(password)
+        self.selenium.find_element_by_class_name('submit').click()
 
 
 class LoginTests(SeleniumTests):
     """Tests the Login view and related template"""
 
     def test_login_with_valid_credentials(self):
-        self.selenium.get('%s' % self.live_server_url)
-        self.selenium.find_element_by_link_text('Log in').click()
-        username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys(self.admin_name)
-        password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys(self.admin_pass)
-        self.selenium.find_element_by_class_name('submit').click()
-        self.assertTrue(self.exists_by_link_text('Logout'))
+        self.login(self.admin_name, self.admin_pass)
+        self.assertTrue(self.link_text_exists('Logout'))
+        self.selenium.delete_all_cookies()
+
+    def test_login_with_invalid_credentials(self):
+        self.login(self.admin_name, 'wrong password')
+        self.assertTrue(self.element_with_selector_exists('.error_message'))
         self.selenium.delete_all_cookies()
