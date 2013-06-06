@@ -10,8 +10,8 @@ import os
 
 class Item(models.Model):
     description = models.CharField(max_length=100)
+    local_num = models.IntegerField()
     location = models.CharField(max_length=100, blank=True)
-    local_num = models.CharField(max_length=50, blank=True)
     cfi = models.CharField(max_length=20, blank=True)
     part_class = models.CharField(max_length=50, blank=True)
     company = models.CharField(max_length=100, blank=True)

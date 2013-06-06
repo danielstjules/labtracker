@@ -6,7 +6,7 @@ urlpatterns = patterns(
     'labtracker.views',
     url(r'^((?P<page>\d+)/)?$',
         ListView.as_view(
-            queryset=Item.objects.all(),
+            queryset=Item.objects.order_by('local_num'),
             paginate_by=50,
             template_name='item_list.html')),
     url(r'^item/(?P<item_id>\d+)/$', 'item_detail'),
