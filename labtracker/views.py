@@ -98,6 +98,12 @@ def request_list(request):
 
 def request_detail(request, request_id):
     """View details of a request"""
+    # Display login page and error if the user isn't logged in
+    if not request.user.is_authenticated():
+        error_response = {'error_message': 'You must login to view this page.'}
+        return render_to_response('auth.html', error_response,
+                                  context_instance=RequestContext(request))
+
     req = get_object_or_404(Request, pk=request_id)
     item = Item.objects.get(pk=req.item.id)
     req_list = Request.objects.filter(item=item, status='active')

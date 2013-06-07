@@ -1,5 +1,5 @@
 from django.test import TestCase, LiveServerTestCase
-from labtracker.models import Item, Request, Download
+from labtracker.models import Item, Request, Download, Comment
 from django_dynamic_fixture import G
 from django.contrib.auth.models import User
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -282,6 +282,7 @@ class ItemDetailTests(SeleniumTests):
         downloads = []
         for i in xrange(5):
             downloads.append(G(Download, item=item))
+
         self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
         for i in xrange(5):
             self.assertTrue(self.text_exists(downloads[i].name))
@@ -293,6 +294,7 @@ class ItemDetailTests(SeleniumTests):
         requests = []
         for i in xrange(5):
             requests.append(G(Request, item=item))
+
         self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
         for i in xrange(5):
             self.assertTrue(self.text_exists(requests[i].__unicode__()))
@@ -334,3 +336,172 @@ class SubmitRequestTests(SeleniumTests):
         self.submit_request(notes)
         self.assertEqual(Request.objects.filter(notes=notes).count(), 1)
         self.assertTrue(self.element_with_selector_exists('.success_message'))
+
+
+class ModifyRequestStatusTests(SeleniumTests):
+    """Tests modify_request_status view"""
+
+    def test_changing_status_to_valid_choice(self):
+        # Tests switching to all of STATUS_CHOICES
+        self.create_items_and_requests(1)
+        self.login(self.admin_name, self.admin_pass)
+        request = Request.objects.get(pk=1)
+
+        for key, val in request.STATUS_CHOICES:
+            self.selenium.get('%s/request/1/' % self.live_server_url)
+            # Click on select box
+            self.selenium.find_element_by_name('choice').click()
+            # Click on option
+            option = "//select[@id='choice']/option[@value='%s']" % key
+            self.selenium.find_element_by_xpath(option).click()
+
+            # After redirect, check that the value is now selected
+            self.selenium.find_element_by_name('choice').click()
+            selected = "//option[@value='%s' and @class='selected']" % key
+            self.assertTrue(self.xpath_exists(selected))
+            request = Request.objects.get(pk=1)
+            self.assertTrue(request.status, key)
+
+    def test_should_fail_if_logged_out(self):
+        self.create_items_and_requests(1)
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        # Delete sessionid cookie to logout
+        self.selenium.delete_cookie('sessionid')
+
+        # Click on select box
+        self.selenium.find_element_by_name('choice').click()
+        # Click on Completed option
+        completed_option = "//select[@id='choice']/option[@value='Completed']"
+        self.selenium.find_element_by_xpath(completed_option).click()
+
+        # Status should still be pending, rather than completed
+        request = Request.objects.get(pk=1)
+        self.assertTrue(request.status, request.PENDING)
+
+
+class PostCommentTests(SeleniumTests):
+    """Tests the post_comment view"""
+
+    def test_fail_if_logged_out(self):
+        self.create_items_and_requests(1)
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        # Delete sessionid cookie to logout
+        self.selenium.delete_cookie('sessionid')
+
+        # Submit comment
+        comment_textarea = self.selenium.find_element_by_id('comment')
+        content = 'Testing'
+        comment_textarea.send_keys(content)
+        submit_path = "//form[@id='comment_form']/input[@type='submit']"
+        self.selenium.find_element_by_xpath(submit_path).click()
+
+        # Make sure the comment wasn't added
+        self.assertTrue(self.element_with_selector_exists('.error_message'))
+        self.assertEqual(Comment.objects.filter(content=content).count(), 0)
+
+    def test_comment_if_logged_in(self):
+        self.create_items_and_requests(1)
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+
+        # Submit comment
+        comment_textarea = self.selenium.find_element_by_id('comment')
+        content = 'Testing'
+        comment_textarea.send_keys(content)
+        submit_path = "//form[@id='comment_form']/input[@type='submit']"
+        self.selenium.find_element_by_xpath(submit_path).click()
+
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        self.assertEqual(Comment.objects.filter(content=content).count(), 1)
+        self.assertTrue(self.text_exists(content))
+
+
+class RequestListTests(SeleniumTests):
+    """Tests the request_list view"""
+
+    def test_show_error_if_logged_out(self):
+        self.selenium.get('%s/requests/' % self.live_server_url)
+        self.assertTrue(self.element_with_selector_exists('.error_message'))
+
+    def test_show_requests_with_status_and_links(self):
+        # Generate two requests by the same user and check their requests page
+        item = self.create_generic_item()
+        user = User.objects.get(username=self.user_name)
+        first_req = G(Request, item=item, user=user, status=Request.APPROVED)
+        second_req = G(Request, item=item, user=user, status=Request.COMPLETED)
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/requests/' % self.live_server_url)
+
+        # Links to both requests should be present
+        first_link = "//tbody/tr/td/a[@href='%s']" % first_req.get_absolute_url()
+        self.assertTrue(self.xpath_exists(first_link))
+        second_link = "//tbody/tr/td/a[@href='%s']" % second_req.get_absolute_url()
+        self.assertTrue(self.xpath_exists(second_link))
+
+        # The request statuses should be displayed
+        self.assertTrue(self.text_exists(first_req.status, '//tbody'))
+        self.assertTrue(self.text_exists(second_req.status, '//tbody'))
+
+
+class RequestDetailTests(SeleniumTests):
+    """Tests the request_detail view"""
+
+    def test_displays_necessary_fields(self):
+        # Test that user, item, notes and status are displayed
+        item = self.create_generic_item()
+        user = User.objects.get(username=self.user_name)
+        notes = 'test request notes'
+        req = G(Request, item=item, user=user, notes=notes)
+
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+
+        fieldValues = [item.description, req.status, user.username, notes]
+        for value in fieldValues:
+            self.assertTrue(self.text_exists(str(value)))
+
+    def test_show_error_if_logged_out(self):
+        self.create_items_and_requests(1)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        self.assertTrue(self.element_with_selector_exists('.error_message'))
+
+    def test_show_change_status_select_if_staff(self):
+        self.create_items_and_requests(1)
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        self.assertTrue(self.element_with_selector_exists('#choice'))
+
+    def test_hide_change_status_select_if_normal_user(self):
+        self.create_items_and_requests(1)
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+        self.assertFalse(self.element_with_selector_exists('#choice'))
+
+    def test_show_comment_form(self):
+        #Make sure the textarea and submit button are shown in the comment form
+        self.create_items_and_requests(1)
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+
+        textarea_path = "//form[@id='comment_form']/textarea"
+        self.assertTrue(self.xpath_exists(textarea_path))
+
+        submit_path = "//form[@id='comment_form']/input[@type='submit']"
+        self.assertTrue(self.xpath_exists(submit_path))
+
+    def test_show_comments(self):
+        # Create the item, request, and comment under a normal user
+        item = self.create_generic_item()
+        user = User.objects.get(username=self.user_name)
+        req = G(Request, item=item, user=user)
+        comment_one = G(Comment, request=req, user=user, content='Test comment')
+        comment_two = G(Comment, request=req, user=user, content='another')
+
+        self.login(self.admin_name, self.admin_pass)
+        self.selenium.get('%s/request/1/' % self.live_server_url)
+
+        # Verify that the comment is shown
+        self.assertTrue(self.text_exists(comment_one.content))
+        self.assertTrue(self.text_exists(comment_two.content))

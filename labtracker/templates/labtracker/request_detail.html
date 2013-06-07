@@ -44,7 +44,7 @@
 		<h2>Change Status</h2>	
 		<form action="{{ req.get_modify_url }}" method="post">
 			{% csrf_token %}
-			<select name="choice" id="choice_id" onchange="javascript: submit(this);">
+			<select name="choice" id="choice" onchange="javascript: submit(this);">
 				{% for key,val in req.STATUS_CHOICES %}
 					{% if key != req.status %}
 						<option value="{{key}}">{{val}}</option>
@@ -67,7 +67,7 @@
 		{% endfor %}
 	{% endif %}
 
-	<form action="{{ req.get_post_comment_url }}" method="post">
+	<form action="{{ req.get_post_comment_url }}" method="post" id="comment_form">
 		{% csrf_token %}
 		<label for="comment">Post a comment</label><br />
 		<textarea name="comment" id="comment" cols="100" rows="5"></textarea>
