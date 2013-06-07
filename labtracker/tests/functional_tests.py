@@ -1,5 +1,5 @@
 from django.test import TestCase, LiveServerTestCase
-from labtracker.models import Item, Request
+from labtracker.models import Item, Request, Download
 from django_dynamic_fixture import G
 from django.contrib.auth.models import User
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -166,11 +166,11 @@ class SeleniumTests(LiveServerTestCase):
 class LoginTests(SeleniumTests):
     """Tests the Login view and related template"""
 
-    def test_login_with_valid_credentials(self):
+    def test_valid_credentials(self):
         self.login(self.admin_name, self.admin_pass)
         self.assertTrue(self.link_text_exists('Logout'))
 
-    def test_login_with_invalid_credentials(self):
+    def test_invalid_credentials(self):
         self.login(self.admin_name, 'wrong password')
         self.assertTrue(self.element_with_selector_exists('.error_message'))
 
@@ -178,11 +178,11 @@ class LoginTests(SeleniumTests):
 class ItemListTests(SeleniumTests):
     """Tests the Item List (home page)"""
 
-    def test_item_list_with_no_items(self):
+    def test_no_items(self):
         self.selenium.get('%s' % self.live_server_url)
         self.assertTrue(self.text_exists('No items'))
 
-    def test_item_list_pagination_displays_pages(self):
+    def test_pagination_displays_pages(self):
         # Test that it contains a li in the pagination div with class active,
         # as well as anchors with the text 1 and 2
         self.create_items_and_requests(60)
@@ -194,7 +194,7 @@ class ItemListTests(SeleniumTests):
         self.assertTrue(self.xpath_exists(
             "//div[contains(@class,'pagination')]/ul/li/a[text()='2']"))
 
-    def test_item_list_secondary_pages_contains_items(self):
+    def test_secondary_pages_contain_items(self):
         # Go to the 2nd, then 3rd page and check that the equipment_list contains
         # an anchor
         self.create_items_and_requests(110)
@@ -208,7 +208,7 @@ class ItemListTests(SeleniumTests):
         self.assertTrue(self.xpath_exists(
             "//table[@id='equipment_list']/tbody/tr/td/a"))
 
-    def test_item_list_table_links_to_items(self):
+    def test_table_links_to_items(self):
         # Make sure the table contains anchors with the item's absolute url
         self.create_items_and_requests(1)
         self.selenium.get('%s' % self.live_server_url)
@@ -217,7 +217,7 @@ class ItemListTests(SeleniumTests):
         item_xpath = "%s/tbody/tr/td/a[@href='%s']" % (table, item.get_absolute_url())
         self.assertTrue(self.xpath_exists(item_xpath))
 
-    def test_item_list_asc_order_of_local_num(self):
+    def test_table_in_asc_order_of_local_num(self):
         # Equipment should be displayed in ascending order by local_num (#)
         self.create_items_and_requests(5)
         self.selenium.get('%s' % self.live_server_url)
@@ -228,7 +228,7 @@ class ItemListTests(SeleniumTests):
             item_xpath = "%sa[@href='%s']" % (row, item.get_absolute_url())
             self.assertTrue(self.xpath_exists(item_xpath))
 
-    def test_item_list_displays_necessary_fields(self):
+    def test_displays_necessary_fields(self):
         # Item list should show local_num (#), part_class, location, description,
         # cfi, company and part_num
         item = G(Item, local_num='9009', part_class='parts class',
@@ -240,3 +240,67 @@ class ItemListTests(SeleniumTests):
         table = "//table[@id='equipment_list']"
         for value in fieldValues:
             self.assertTrue(self.text_exists(value, table))
+
+
+class ItemDetailTests(SeleniumTests):
+    """Tests the item_detail view and template"""
+
+    def create_generic_item(self):
+        # Quick helper in the absence of fixtures
+        item = G(Item, local_num=9999, part_class='parts class',
+                 location='cart 8', description='test item', cfi='never',
+                 company='A Business', part_num='X9X9', serial_num='8A',
+                 asset_num='sample_num', notes='Testing')
+        return item
+
+    def test_shows_all_available_fields(self):
+        # Test that all fields are displayed on the details page
+        item = self.create_generic_item()
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        fieldValues = [item.local_num, item.part_class, item.location,
+                       item.description, item.cfi, item.company, item.part_num,
+                       item.serial_num, item.asset_num, item.notes, 1]
+        for value in fieldValues:
+            self.assertTrue(self.text_exists(str(value)))
+
+    def test_request_use_form_visibility_when_logged_out(self):
+        # Make sure the form isn't visible when not logged in
+        item = self.create_generic_item()
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        self.assertFalse(self.xpath_exists("//form"))
+
+    def test_request_use_form_visibility_when_logged_in(self):
+        # Make sure the form is visible when logged in
+        item = self.create_generic_item()
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        self.assertTrue(self.xpath_exists("//form"))
+
+    def test_listing_downloads(self):
+        # Downloads and their information should be available
+        item = self.create_generic_item()
+        downloads = []
+        for i in xrange(5):
+            downloads.append(G(Download, item=item))
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        for i in xrange(5):
+            self.assertTrue(self.text_exists(downloads[i].name))
+            self.assertTrue(self.text_exists(downloads[i].notes))
+
+    def test_listing_requests(self):
+        # Related requests should be listed
+        item = self.create_generic_item()
+        requests = []
+        for i in xrange(5):
+            requests.append(G(Request, item=item))
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        for i in xrange(5):
+            self.assertTrue(self.text_exists(requests[i].__unicode__()))
+
+    def test_incrementing_views(self):
+        # Test that item.view increments with each request
+        item = self.create_generic_item()
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        for i in xrange(5):
+            self.selenium.refresh()
+        self.assertTrue(self.text_exists('6'))
