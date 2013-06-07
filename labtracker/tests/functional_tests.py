@@ -162,6 +162,14 @@ class SeleniumTests(LiveServerTestCase):
             self.item = G(Item)
             self.request = G(Request, item=self.item)
 
+    def create_generic_item(self):
+        # Quick helper in the absence of fixtures
+        item = G(Item, local_num=9999, part_class='parts class',
+                 location='cart 8', description='test item', cfi='never',
+                 company='A Business', part_num='X9X9', serial_num='8A',
+                 asset_num='sample_num', notes='Testing')
+        return item
+
 
 class LoginTests(SeleniumTests):
     """Tests the Login view and related template"""
@@ -245,14 +253,6 @@ class ItemListTests(SeleniumTests):
 class ItemDetailTests(SeleniumTests):
     """Tests the item_detail view and template"""
 
-    def create_generic_item(self):
-        # Quick helper in the absence of fixtures
-        item = G(Item, local_num=9999, part_class='parts class',
-                 location='cart 8', description='test item', cfi='never',
-                 company='A Business', part_num='X9X9', serial_num='8A',
-                 asset_num='sample_num', notes='Testing')
-        return item
-
     def test_shows_all_available_fields(self):
         # Test that all fields are displayed on the details page
         item = self.create_generic_item()
@@ -304,3 +304,33 @@ class ItemDetailTests(SeleniumTests):
         for i in xrange(5):
             self.selenium.refresh()
         self.assertTrue(self.text_exists('6'))
+
+
+class SubmitRequestTests(SeleniumTests):
+    """Tests the submit_request view and the template it renders"""
+
+    def submit_request(self, notes):
+        # Submits and item request
+        notes_input = self.selenium.find_element_by_name('notes')
+        notes_input.send_keys(notes)
+        self.selenium.find_element_by_xpath("//form/input[@type='submit']").click()
+
+    def test_request_fail_if_not_logged_in(self):
+        # Delete session id cookie to try submitting when not logged in
+        item = self.create_generic_item()
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        self.selenium.delete_cookie('sessionid')
+        notes = 'Test request note'
+        self.submit_request(notes)
+        self.assertEqual(Request.objects.filter(notes=notes).count(), 0)
+        self.assertTrue(self.element_with_selector_exists('.error_message'))
+
+    def test_request_pass_if_logged_in(self):
+        item = self.create_generic_item()
+        self.login(self.user_name, self.user_pass)
+        self.selenium.get('%s/item/%i/' % (self.live_server_url, item.pk))
+        notes = 'Test request notes'
+        self.submit_request(notes)
+        self.assertEqual(Request.objects.filter(notes=notes).count(), 1)
+        self.assertTrue(self.element_with_selector_exists('.success_message'))
